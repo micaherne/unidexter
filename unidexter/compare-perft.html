@@ -1,0 +1,135 @@
+<html><head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<style type="text/css">
+.col {
+    width: 40%;
+    float: left;
+}
+
+.clear {
+    clear: both;
+}
+</style>
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function(e) {
+    var form = document.querySelector("form");
+    var perftMoves = [];
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        var textareas = document.querySelectorAll("textarea");
+        for (var i = 0; i &lt; textareas.length; i++) {
+            perftMoves[i] = parsePerftOutput(textareas[i].value);
+        }
+
+        var results = comparePerftOutput(perftMoves);
+        
+        displayResults(results);
+    });
+    
+})
+
+function displayResults(results) {
+    var div = document.getElementById("results");
+    var text = '';
+    if (results.in0not1.length &gt; 0) {
+        text += "&lt;p&gt;In first, not second: " + results.in0not1.join(", ") + "&lt;/p&gt;";
+    }
+    if (results.in1not0.length &gt; 0) {
+        text += "&lt;p&gt;In second, not first: " + results.in0not1.join(", ") + "&lt;/p&gt;";
+    }
+    if (results.different) {
+        text += "&lt;p&gt;Differences: &lt;table&gt;";
+        for (d in results.different) {
+            var v = results.different[d];
+            v.unshift(d);
+            text += "&lt;tr&gt;&lt;td&gt;" + v.join("&lt;/td&gt;&lt;td&gt;") + "&lt;/td&gt;&lt;/tr&gt;";
+        }
+        text += "&lt;/table&gt;&lt;/p&gt;";
+    }
+    div.innerHTML = text;
+}
+
+function parsePerftOutput(text) {
+    var result = [];
+    var lines = text.split("\n");
+    for (var i = 0; i &lt; lines.length; i++) {
+        var line = lines[i].trim();
+        var parts = line.split(" ");
+        if (parts.length != 2) {
+            continue;
+        }
+        if (!isNumber(parts[1])) {
+            continue;
+        }
+        if (parts[0].length &gt; 5) {
+            continue;
+        }
+        result[parts[0]] = parseInt(parts[1]);
+    }
+    return result;
+}
+
+function comparePerftOutput(perftOutput) {
+    var result = {
+            "in0not1": [],
+            "in1not0": [],
+            "different": []
+    }
+    var moves0 = perftOutput[0].keys();
+    var moves1 = perftOutput[1].keys();
+    
+    var commonMoves = new Set();
+
+    var move;
+    for (move in perftOutput[0]) {
+        if (!(move in perftOutput[1])) {
+            result.in0not1.push(move);
+        } else {
+            commonMoves.add(move);
+        }
+    }
+
+    for (move in perftOutput[1]) {
+        if (!(move in perftOutput[0])) {
+            result.in1not0.push(move);
+        } else {
+            commonMoves.add(move);
+        }
+    }
+    
+    commonMoves.forEach(function(move) {
+        if (perftOutput[0][move] != perftOutput[1][move]) {
+            result.different[move] = [perftOutput[0][move], perftOutput[1][move], perftOutput[1][move] - perftOutput[0][move]];
+        }
+    })
+    
+    return result;
+}
+
+// Nicked from http://stackoverflow.com/questions/18082/validate-decimal-numbers-in-javascript-isnumeric
+function isNumber(n) {
+    return !isNaN(parseFloat(n)) &amp;&amp; isFinite(n);
+}
+
+</script>
+</head>
+<body>
+<h1>Compare perft</h1>
+<form>
+<div class="clear">
+<input type="submit">
+</div>
+<div id="results"></div>
+<div class="col">
+<h2>Perft output 1</h2>
+<textarea cols="40" rows="50"></textarea>
+</div>
+<div class="col">
+<h2>Perft output 2</h2>
+<textarea cols="40" rows="50"></textarea>
+</div>
+
+</form>
+
+</body></html>
