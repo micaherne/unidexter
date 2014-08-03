@@ -2,6 +2,8 @@ package uk.co.micaherne.unidexter;
 
 public class FENException extends NotationException {
 
+	private static final long serialVersionUID = 1L;
+
 	public FENException(String message) {
 		super(message);
 	}

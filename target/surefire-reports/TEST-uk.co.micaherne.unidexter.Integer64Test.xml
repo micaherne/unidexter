@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.os.patch.level" value=""/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="C:\dev\workspace\unidexter"/>
+    <property name="user.dir" value="C:\Users\michael\git\micaherne\unidexter"/>
     <property name="java.runtime.version" value="1.8.0_05-b13"/>
     <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
     <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.8.0_05\jre\lib\endorsed"/>
@@ -26,7 +26,7 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="user.variant" value=""/>
     <property name="os.name" value="Windows 8.1"/>
-    <property name="classworlds.conf" value="C:\dev\workspace\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf780794905110440519.tmp"/>
+    <property name="classworlds.conf" value="C:\dev\workspace\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf3269938332011832805.tmp"/>
     <property name="sun.jnu.encoding" value="Cp1252"/>
     <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_05\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:/Program Files/Java/jre8/bin/server;C:/Program Files/Java/jre8/bin;C:/Program Files/Java/jre8/lib/amd64;C:\dev\bin\php-5.5.6-Win32-VC11;C:\dev\bin\cygwin\bin;C:\dev\bin\Python33\;C:\dev\bin\jdk1.7.0_10\bin;c:\Program Files (x86)\Intel\iCLS Client\;c:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files\TortoiseSVN\bin;C:\Program Files\SlikSvn\bin;C:\Program Files\MySQL\MySQL Server 5.6\bin;C:\ProgramData\Composer\bin;C:\Program Files\Shibboleth\SP\lib;C:\Program Files (x86)\Shibboleth\SP\lib;C:\dev\bin\nodejs\;C:\Program Files (x86)\QuickTime\QTSystem\;C:\dev\bin\Ruby193\bin;C:\dev\bin\php-5.5.6-Win32-VC11;C:\dev\bin\cygwin\bin;C:\dev\bin\Python33\;C:\dev\bin\jdk1.7.0_10\bin;c:\Program Files (x86)\Intel\iCLS Client\;c:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files\TortoiseSVN\bin;C:\Program Files\SlikSvn\bin;C:\Program Files\MySQL\MySQL Server 5.6\bin;C:\ProgramData\Composer\bin;C:\Program Files\Shibboleth\SP\lib;C:\Program Files (x86)\Shibboleth\SP\lib;C:\dev\bin\nodejs\;C:\Program Files (x86)\QuickTime\QTSystem\;C:\dev\bin\php-5.4.3;C:\Program Files (x86)\Git\bin;C:\dev\bin\apache-maven-3.0.4\bin;C:\dev\lib\android-sdk\tools;C:\dev\lib\android-sdk\platform-tools;C:\Users\michael\AppData\Roaming\npm;C:\dev\bin\apache-ant-1.9.2\bin;C:\Users\michael\AppData\Roaming\Composer\vendor\bin;C:\dev\bin\eclipse;;."/>
     <property name="java.specification.name" value="Java Platform API Specification"/>

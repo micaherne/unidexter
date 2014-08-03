@@ -6,11 +6,9 @@ import java.io.InputStreamReader;
 
 import uk.co.micaherne.unidexter.Chess;
 import uk.co.micaherne.unidexter.FENException;
-import uk.co.micaherne.unidexter.MoveUtils;
 import uk.co.micaherne.unidexter.NotationException;
 import uk.co.micaherne.unidexter.Position;
 import uk.co.micaherne.unidexter.Search;
-import uk.co.micaherne.unidexter.notation.AlgebraicNotation;
 import uk.co.micaherne.unidexter.notation.LongAlgebraicNotation;
 
 public class UCI {

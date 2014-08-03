@@ -1,11 +1,9 @@
 package uk.co.micaherne.unidexter.perft;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import uk.co.micaherne.unidexter.MoveGenerator;
 import uk.co.micaherne.unidexter.NotationException;
 import uk.co.micaherne.unidexter.Position;
 
@@ -49,6 +47,8 @@ public class PerftCompare {
 				}
 			}
 		}
+		
+		reader.close();
 		
 		System.out.println("Passed: " + passes);
 		System.out.println("Failed: " + fails);

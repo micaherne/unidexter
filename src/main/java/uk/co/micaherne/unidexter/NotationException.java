@@ -2,6 +2,8 @@ package uk.co.micaherne.unidexter;
 
 public class NotationException extends Exception {
 
+	private static final long serialVersionUID = 1L;
+	
 	public NotationException(String message) {
 		super(message);
 	}

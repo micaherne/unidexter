@@ -13,7 +13,7 @@ public class TestPosition {
 
 	@Test
 	public void testFromFEN() throws NotationException {
-		Position position = Position.fromFEN(Chess.START_POS_FEN);
+		// Position position = Position.fromFEN(Chess.START_POS_FEN);
 	}
 	
 	@Test
@@ -92,7 +92,6 @@ public class TestPosition {
 		
 		// Make sure unmake works for black too
 		Position position3 = Position.fromFEN("4k3/2p5/8/3P4/8/8/8/4K3 b - - 0 1");
-		int board3[] = position3.board.clone();
 		position3.move(MoveUtils.create(Chess.Square.C7, Chess.Square.C5));
 		position3.move(MoveUtils.create(Chess.Square.D5, Chess.Square.C6, false, true));
 		position3.unmakeMove();

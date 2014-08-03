@@ -1,15 +1,12 @@
 package uk.co.micaherne.unidexter;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 public class TempTest {
 
-	@Test
+/*	@Test
 	public void test() {
 		long[] arr = new long[10000];
 		List<Long> list = new ArrayList<Long>(10000);
@@ -35,7 +32,7 @@ public class TempTest {
 		long tt3 = System.nanoTime() - start3;
 		System.out.println("Time taken: " + (tt3) + " nanoseconds");
 		System.out.println("Difference: " + (tt2 / tt1) * 100 + "%");
-	}
+	}*/
 	
 	@Test
 	public void test2() {

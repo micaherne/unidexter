@@ -22,7 +22,7 @@ public class Integer64Test {
 	
 	@Test
 	public void testTwo() {
-		long[] colourBitboards = new long[2];
+		//long[] colourBitboards = new long[2];
 		//System.out.println(colourBitboards[0]);
 	}
 	

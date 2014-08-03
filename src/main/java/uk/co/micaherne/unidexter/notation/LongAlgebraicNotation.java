@@ -27,7 +27,6 @@ public class LongAlgebraicNotation extends AlgebraicNotation {
 		assert toSquare < 8;
 		int promotedPiece = MoveUtils.promotedPiece(move);
 		boolean isQueening = MoveUtils.isQueening(move);
-		boolean isEnPassentCapture = MoveUtils.isEnPassentCapture(move);
 		StringBuilder result = new StringBuilder();
 		result.append((char)('a' + (fromSquare % 8)));
 		result.append((fromSquare / 8) + 1);

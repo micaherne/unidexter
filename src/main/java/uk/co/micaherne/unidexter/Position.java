@@ -271,9 +271,6 @@ public class Position {
 		int fromSquare = MoveUtils.fromSquare(undo.move);
 		int toSquare = MoveUtils.toSquare(undo.move);
 		
-		int sideThatMoved = whiteToMove ? Chess.Colour.BLACK : Chess.Colour.WHITE;
-		int opposingSide = whiteToMove ? Chess.Colour.WHITE : Chess.Colour.WHITE;
-		
 		board[fromSquare] = undo.movedPiece;
 		board[toSquare] = undo.capturedPiece;
 		epSquare = undo.epSquare;

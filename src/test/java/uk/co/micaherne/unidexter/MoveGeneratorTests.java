@@ -1,11 +1,12 @@
 package uk.co.micaherne.unidexter;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.co.micaherne.unidexter.Chess.Colour;
 import uk.co.micaherne.unidexter.notation.LongAlgebraicNotation;
 
 public class MoveGeneratorTests {
@@ -96,8 +97,8 @@ public class MoveGeneratorTests {
 	
 	@Test
 	public void testTemp() throws NotationException {
-		Position position2 = Position.fromFEN("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -");
-		MoveGenerator moveGenerator2 = new MoveGenerator(position2);
+		// Position position2 = Position.fromFEN("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -");
+		// MoveGenerator moveGenerator2 = new MoveGenerator(position2);
 		// System.out.println(BitboardUtils.toString(moveGenerator2.bishopAttacks(Chess.Square.F1)));
 		/* assertTrue(moveGenerator2.attacks(Chess.Square.C3, Chess.Colour.BLACK));
 		assertTrue(moveGenerator2.attacks(Chess.Square.C4, Chess.Colour.BLACK));
