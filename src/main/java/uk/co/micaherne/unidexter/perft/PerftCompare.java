@@ -16,8 +16,8 @@ import uk.co.micaherne.unidexter.Position;
 public class PerftCompare {
 
 	public static void main(String[] args) throws IOException, NotationException {
-		int maxDepth = 5;
-		FileReader fileReader = new FileReader("C:/dev/workspace/java-chess/roce39/perftsuite.epd");
+		int maxDepth = 4;
+		FileReader fileReader = new FileReader("C:/Users/michael/git/micaherne/unidexter/roce39/perftsuite.epd");
 		BufferedReader reader = new BufferedReader(fileReader);
 		String line;
 		int passes = 0;

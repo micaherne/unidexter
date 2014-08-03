@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
     form.addEventListener("submit", function(e) {
         e.preventDefault();
         var textareas = document.querySelectorAll("textarea");
-        for (var i = 0; i &lt; textareas.length; i++) {
+        for (var i = 0; i < textareas.length; i++) {
             perftMoves[i] = parsePerftOutput(textareas[i].value);
         }
 
@@ -32,20 +32,20 @@ document.addEventListener("DOMContentLoaded", function(e) {
 function displayResults(results) {
     var div = document.getElementById("results");
     var text = '';
-    if (results.in0not1.length &gt; 0) {
-        text += "&lt;p&gt;In first, not second: " + results.in0not1.join(", ") + "&lt;/p&gt;";
+    if (results.in0not1.length > 0) {
+        text += "<p>In first, not second: " + results.in0not1.join(", ") + "</p>";
     }
-    if (results.in1not0.length &gt; 0) {
-        text += "&lt;p&gt;In second, not first: " + results.in0not1.join(", ") + "&lt;/p&gt;";
+    if (results.in1not0.length > 0) {
+        text += "<p>In second, not first: " + results.in0not1.join(", ") + "</p>";
     }
     if (results.different) {
-        text += "&lt;p&gt;Differences: &lt;table&gt;";
+        text += "<p>Differences: <table>";
         for (d in results.different) {
             var v = results.different[d];
             v.unshift(d);
-            text += "&lt;tr&gt;&lt;td&gt;" + v.join("&lt;/td&gt;&lt;td&gt;") + "&lt;/td&gt;&lt;/tr&gt;";
+            text += "<tr><td>" + v.join("</td><td>") + "</td></tr>";
         }
-        text += "&lt;/table&gt;&lt;/p&gt;";
+        text += "</table></p>";
     }
     div.innerHTML = text;
 }
@@ -53,7 +53,7 @@ function displayResults(results) {
 function parsePerftOutput(text) {
     var result = [];
     var lines = text.split("\n");
-    for (var i = 0; i &lt; lines.length; i++) {
+    for (var i = 0; i < lines.length; i++) {
         var line = lines[i].trim();
         var parts = line.split(" ");
         if (parts.length != 2) {
@@ -62,7 +62,7 @@ function parsePerftOutput(text) {
         if (!isNumber(parts[1])) {
             continue;
         }
-        if (parts[0].length &gt; 5) {
+        if (parts[0].length > 5) {
             continue;
         }
         result[parts[0]] = parseInt(parts[1]);
