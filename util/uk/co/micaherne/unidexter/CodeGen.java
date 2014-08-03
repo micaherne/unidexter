@@ -1,29 +1,11 @@
 package uk.co.micaherne.unidexter;
 
-import static org.junit.Assert.*;
 
-import org.junit.Before;
-import org.junit.Test;
-
-public class Integer64Test {
-
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	@Test
-	public void testOne() {
-		long l1 = -1L;
-		assertEquals(1, l1 >>> 63);
-		/*System.out.println(Chess.Square.A1);
-		System.out.println(Chess.Piece.BISHOP);*/
-		
-	}
+public class CodeGen {
 	
-	@Test
-	public void testTwo() {
-		//long[] colourBitboards = new long[2];
-		//System.out.println(colourBitboards[0]);
+	public static void main(String[] args) {
+		CodeGen codeGen = new CodeGen();
+		codeGen.generateSquares();
 	}
 	
 	public void generateSquares() {
@@ -40,7 +22,6 @@ public class Integer64Test {
 		}
 	}
 	
-	@Test
 	public void generateLines() {
 		long fileA = 1L;
 		long rank1 = 1L;
@@ -69,6 +50,5 @@ public class Integer64Test {
 			System.out.println(rankOutput[i]);
 		}
 	}
-	
 
 }
