@@ -1,0 +1,1 @@
+java -Xmx512M -jar target/unidexter-0.0.1-SNAPSHOT.jar uk.co.micaherne.unidexter.Main

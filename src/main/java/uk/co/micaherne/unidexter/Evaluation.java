@@ -31,5 +31,9 @@ public class Evaluation {
 		return Long.bitCount(position.pieceBitboards[pieceType] & position.colourBitboards[Chess.Colour.WHITE]) 
 				- Long.bitCount(position.pieceBitboards[pieceType] & position.colourBitboards[Chess.Colour.BLACK]);
 	}
+	
+	public void setPosition(Position position) {
+		this.position = position;
+	}
 
 }

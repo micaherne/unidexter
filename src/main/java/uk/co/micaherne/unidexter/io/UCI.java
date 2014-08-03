@@ -9,6 +9,7 @@ import uk.co.micaherne.unidexter.FENException;
 import uk.co.micaherne.unidexter.MoveUtils;
 import uk.co.micaherne.unidexter.NotationException;
 import uk.co.micaherne.unidexter.Position;
+import uk.co.micaherne.unidexter.Search;
 import uk.co.micaherne.unidexter.notation.AlgebraicNotation;
 import uk.co.micaherne.unidexter.notation.LongAlgebraicNotation;
 
@@ -33,12 +34,14 @@ public class UCI {
 	BufferedReader in;
 	private Position currentPosition;
 	private LongAlgebraicNotation notation;
+	public Search search;
 
 
 	public UCI() {
 		super();
 		in = new BufferedReader(new InputStreamReader(System.in));
 		notation = new LongAlgebraicNotation();
+		search = new Search(currentPosition);
 	}
 
 
@@ -89,10 +92,14 @@ public class UCI {
 				}
 		}
 		if("go".equals(keyword)) {
-			// commandGo(input);
+			try {
+				commandGo(input);
+			} catch (NotationException e) {
+				doOutput("info error searching for move " + e.getMessage());
+			}
 		}
 		
-		//System.out.println(input);
+		// System.out.println(input);
 	}
 	
 	private void doOutput(Object output) {
@@ -125,6 +132,7 @@ public class UCI {
 		if("startpos".equals(tokens[1])) {
 			try {
 				currentPosition = Position.fromFEN(Chess.START_POS_FEN);
+				search.setPosition(currentPosition);
 				if(tokens.length > 3 && "moves".equals(tokens[2])){
 					for(int i = 3; i < tokens.length; i++) {
 						int move = notation.parseMove(tokens[i]);
@@ -144,13 +152,11 @@ public class UCI {
 		}
 	}
 	
-/*    private void commandGo(String input) {
-		int[] bestMove = currentPosition.bestMove();
-		doOutput("info string e.p. " + currentPosition.epSquare[0] + ", " + currentPosition.epSquare[1]);
-		doOutput("info nodes " + currentPosition.getNodesSearched());
-		doOutput("bestmove " + currentPosition.moveNotation(bestMove, NotationType.LONG_ALGEBRAIC));
-		currentPosition.move(bestMove);
-	}*/
+    private void commandGo(String input) throws NotationException {
+    	search.bestMove(3);
+    	int bestMove = search.bestMove[3];
+		doOutput("bestmove " + notation.toString(bestMove));
+	}
 
 
 	public Position getCurrentPosition() {

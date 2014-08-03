@@ -495,4 +495,8 @@ public class MoveGenerator {
 		return colour ^ 1;
 	}
 
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+
 }

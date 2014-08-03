@@ -11,11 +11,11 @@ public class LongAlgebraicNotation extends AlgebraicNotation {
 		}
 		int move;
 		if (representation.length() == 5) {
-			move = MoveUtils.create(toSquare(representation.substring(0, 1)), 
-					toSquare(representation.substring(2,  3)), toPiece("" + representation.charAt(4)));
+			move = MoveUtils.create(toSquare(representation.substring(0, 2)), 
+					toSquare(representation.substring(2,  4)), toPiece("" + representation.charAt(4)));
 		} else {
-			move = MoveUtils.create(toSquare(representation.substring(0, 1)), 
-					toSquare(representation.substring(2,  3)));
+			move = MoveUtils.create(toSquare(representation.substring(0, 2)), 
+					toSquare(representation.substring(2,  4)));
 		}
 		return move;
 	}
