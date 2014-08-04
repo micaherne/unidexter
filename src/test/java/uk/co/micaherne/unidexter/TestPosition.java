@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import uk.co.micaherne.unidexter.perft.Perft;
+
 public class TestPosition {
 
 	@Before
@@ -30,6 +32,14 @@ public class TestPosition {
 		move = MoveUtils.create(Chess.Square.F7, Chess.Square.H8);
 		position.move(move);
 		assertFalse(position.castling[Chess.Colour.BLACK][1]);
+	}
+	
+	@Test
+	public void testMove2() throws NotationException {
+		Position position = Position.fromFEN("rnb1kbnr/pp1pp2p/8/4N2Q/4R3/3B4/2PB1PPP/5RK1 b kq - 0 18");
+		int move = MoveUtils.create(Chess.Square.E8, Chess.Square.E7);
+		assertTrue(position.move(move));
+		assertEquals(1, Perft.perft(position, 1).moveCount);
 	}
 	
 	@Test

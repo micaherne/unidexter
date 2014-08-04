@@ -69,6 +69,21 @@ public class MoveGeneratorTests {
 		assertEquals(7, moves[0]);
 	}
 	
+	@Test
+	public void testGenerateMovesFromCheck() throws NotationException {
+		Position position = Position.fromFEN("rnb1kbnr/pp1pp2p/8/4N2Q/4R3/3B4/2PB1PPP/5RK1 b kq - 0 18");
+		MoveGenerator moveGenerator = new MoveGenerator(position);
+		int[] moves = moveGenerator.generateMoves();
+		int legal = 0;
+		for (int i = 1; i <= moves[0]; i++) {
+			if (position.move(moves[i])) {
+				legal++;
+				position.unmakeMove();
+			}
+		}
+		assertEquals(1, legal);
+	}
+	
 	
 	@Test
 	public void testAttacks() throws NotationException {

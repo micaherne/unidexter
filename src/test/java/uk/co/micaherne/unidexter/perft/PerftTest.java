@@ -70,6 +70,12 @@ public class PerftTest {
 		assertEquals(divide1.size(), divide2.size());
 	}
 	
+	@Test
+	public void testMoveFromCheck() throws NotationException {
+		Position position = Position.fromFEN("rnb1kbnr/pp1pp2p/8/4N2Q/4R3/3B4/2PB1PPP/5RK1 b kq - 0 18");
+		assertEquals(1, Perft.perft(position, 1).moveCount);
+	}
+	
 	// @Test
 	public void testDivide() throws NotationException {
 		// Position position = Position.fromFEN("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq -");

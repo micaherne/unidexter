@@ -5,7 +5,7 @@ public class CodeGen {
 	
 	public static void main(String[] args) {
 		CodeGen codeGen = new CodeGen();
-		codeGen.generateSquares();
+		codeGen.generateCentreSquares();
 	}
 	
 	public void generateSquares() {
@@ -49,6 +49,17 @@ public class CodeGen {
 		for (int i = 0; i < 8; i++) {
 			System.out.println(rankOutput[i]);
 		}
+	}
+	
+	public void generateCentreSquares() {
+		long centre2x2 = 1L << 27 | 1L << 28;
+		centre2x2 |= centre2x2 << 8;
+		long centre4x4 = 1L << 18 | 1L << 19 | 1L << 20 | 1L << 21;
+		centre4x4 |= centre4x4 << 8;
+		centre4x4 |= centre4x4 << 8;
+		centre4x4 |= centre4x4 << 8;
+		System.out.println("public static final long CENTRE2X2 = 0x" + Long.toHexString(centre2x2) + "L;");
+		System.out.println("public static final long CENTRE4X4 = 0x" + Long.toHexString(centre4x4) + "L;");
 	}
 
 }
