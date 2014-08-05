@@ -1,9 +1,14 @@
-package uk.co.micaherne.unidexter;
+package uk.co.micaherne.unidexter.evaluation;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import uk.co.micaherne.unidexter.Chess;
+import uk.co.micaherne.unidexter.NotationException;
+import uk.co.micaherne.unidexter.Position;
+import uk.co.micaherne.unidexter.evaluation.Evaluation;
 
 public class EvaluationTests {
 

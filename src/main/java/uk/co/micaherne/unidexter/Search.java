@@ -1,5 +1,7 @@
 package uk.co.micaherne.unidexter;
 
+import uk.co.micaherne.unidexter.evaluation.Evaluation;
+
 public class Search {
 	
 	public Position position;
@@ -60,7 +62,7 @@ public class Search {
 		}
 		return max;
 	}
-	
+		
 	public int negaMaxAlphaBeta(int alpha, int beta, int depth) {
 		if (depth == 0) {
 			if (position.whiteToMove) {
@@ -78,7 +80,6 @@ public class Search {
 					return beta;
 				}
 				if (score > alpha) {
-					bestMove[depth] = moves[i];
 					alpha = score;
 				}
 				position.unmakeMove();
