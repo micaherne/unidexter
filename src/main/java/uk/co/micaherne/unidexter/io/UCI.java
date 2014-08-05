@@ -151,8 +151,7 @@ public class UCI {
 	}
 	
     private void commandGo(String input) throws NotationException {
-    	search.bestMove(3);
-    	int bestMove = search.bestMove[3];
+    	int bestMove = search.bestMove(4);
 		doOutput("bestmove " + notation.toString(bestMove));
 	}
 
