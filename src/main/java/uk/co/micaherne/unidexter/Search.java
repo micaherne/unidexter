@@ -15,10 +15,28 @@ public class Search {
 	}
 	
 	public int bestMove(int depth) {
-		bestMove = new int[depth + 1];
-		negamax(depth);
+		// bestMove = new int[depth + 1];
+		// negamax(depth);
 		// negaMaxAlphaBeta(Integer.MIN_VALUE, Integer.MAX_VALUE, depth);
-		return bestMove[depth];
+		// return bestMove[depth];
+		return bestMoveNegamax(depth);
+	}
+	
+	public int bestMoveNegamax(int depth) {
+		int bestMove = 0;
+		int max = Integer.MIN_VALUE;
+		int[] moves = moveGenerator.generateMoves();
+		for (int i = 1; i <= moves[0]; i++) {
+			if (position.move(moves[i])) {
+				int score = -negamax(depth - 1);
+				if (score > max) {
+					bestMove = moves[i];
+					max = score;
+				}
+				position.unmakeMove();
+			}
+		}
+		return bestMove;
 	}
 	
 	public int negamax(int depth) {
@@ -31,11 +49,10 @@ public class Search {
 			}
 		}
 		int[] moves = moveGenerator.generateMoves();
-		for (int i = 1; i < moves[0]; i++) {
+		for (int i = 1; i <= moves[0]; i++) {
 			if (position.move(moves[i])) {
 				int score = -negamax(depth - 1);
 				if (score > max) {
-					bestMove[depth] = moves[i];
 					max = score;
 				}
 				position.unmakeMove();
