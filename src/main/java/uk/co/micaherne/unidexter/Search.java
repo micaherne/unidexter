@@ -36,6 +36,11 @@ public class Search {
 				position.unmakeMove();
 			}
 		}
+		// If no moves have worked, it's checkmate or stalemate
+		if (max == Integer.MIN_VALUE) {
+			return evaluation.evaluateTerminal(position, depth);
+		}
+		
 		return bestMove;
 	}
 	
@@ -57,6 +62,11 @@ public class Search {
 				}
 				position.unmakeMove();
 			}
+		}
+		
+		// If no moves have worked, it's checkmate or stalemate
+		if (max == Integer.MIN_VALUE) {
+			return evaluation.evaluateTerminal(position, depth);
 		}
 		return max;
 	}

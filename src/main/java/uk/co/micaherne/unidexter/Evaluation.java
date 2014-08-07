@@ -1,5 +1,7 @@
 package uk.co.micaherne.unidexter;
 
+import uk.co.micaherne.unidexter.Chess.Colour;
+
 public class Evaluation {
 	
 	public Position position;
@@ -33,6 +35,23 @@ public class Evaluation {
 		return result;
 	}
 	
+	/**
+	 * Evaluate a position for which there are no legal moves (i.e. a checkmate or stalemate)
+	 * 
+	 * @param position2
+	 * @param depth
+	 * @return
+	 */
+	public int evaluateTerminal(Position position, int depth) {
+		if (position.whiteToMove && position.inCheck(Colour.WHITE)) {
+			return (Integer.MIN_VALUE / 2 - depth);
+		} else if (!position.whiteToMove && position.inCheck(Colour.BLACK)) {
+			return (Integer.MAX_VALUE / 2 + depth);
+		} else {
+			return 0; // stalemate
+		}
+	}
+	
 	public int materialDifference(int pieceType) {
 		return Long.bitCount(position.pieceBitboards[pieceType] & position.colourBitboards[Chess.Colour.WHITE]) 
 				- Long.bitCount(position.pieceBitboards[pieceType] & position.colourBitboards[Chess.Colour.BLACK]);
@@ -45,5 +64,7 @@ public class Evaluation {
 	public void setPosition(Position position) {
 		this.position = position;
 	}
+
+	
 
 }
