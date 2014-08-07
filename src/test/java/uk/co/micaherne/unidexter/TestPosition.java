@@ -32,6 +32,18 @@ public class TestPosition {
 		move = MoveUtils.create(Chess.Square.F7, Chess.Square.H8);
 		position.move(move);
 		assertFalse(position.castling[Chess.Colour.BLACK][1]);
+		
+		// Test e.p. capture. When playing against it, I'm seeing this:
+		// -->1:position startpos moves e2e4 b8c6 d2d4 e7e6 b1c3 f8b4 c1d2 c6d4 a2a3 b4a5 b2b4 a5b6 f1c4 d7d5 e4d5 c7c5 d5c6
+		// -->1:go wtime 254876 btime 293994 winc 0 binc 0
+		// <--1:bestmove c5b4
+		// *1*---------> Arena:Illegal move!: "c5b4" (Feinprüfung)
+		position = Position.fromFEN("r1bqk1nr/pp3ppp/1b2p3/2pP4/1PBn4/P1N5/2PB1PPP/R2QK1NR w KQkq c6 0 9");
+		move = MoveUtils.create(Chess.Square.D5, Chess.Square.C6, false, true);
+		position.move(move);
+		assertFalse(position.whiteToMove);
+		assertEquals(Chess.Piece.EMPTY, position.board[Chess.Square.C5]);
+		assertEquals(0, position.pieceBitboards[Chess.Piece.PAWN] & Chess.Square.C5);
 	}
 	
 	@Test
