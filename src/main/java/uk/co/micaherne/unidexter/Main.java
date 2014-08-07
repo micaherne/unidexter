@@ -1,14 +1,14 @@
 package uk.co.micaherne.unidexter;
 
-import uk.co.micaherne.unidexter.io.UCI;
+import uk.co.micaherne.unidexter.io.Engine;
 
 public class Main implements Runnable {
 
-	UCI io;
+	Engine engine;
 	
 	public Main() {
 		super();
-		io = new UCI();
+		engine = new Engine();
 	}
 
 	/**
@@ -21,7 +21,7 @@ public class Main implements Runnable {
 	}
 
 	public void run() {
-		io.startInput();
+		engine.startInput();
 	}
 
 }

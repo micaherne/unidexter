@@ -11,7 +11,7 @@ import uk.co.micaherne.unidexter.Position;
 import uk.co.micaherne.unidexter.Search;
 import uk.co.micaherne.unidexter.notation.LongAlgebraicNotation;
 
-public class UCI {
+public class UCI implements ChessProtocol {
 
 	/*
 	 * Input commands
@@ -66,6 +66,10 @@ public class UCI {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see uk.co.micaherne.unidexter.io.ChessProtocol#doInput(java.lang.String)
+	 */
+	@Override
 	public void doInput(String input) throws UCIException {
 		String[] parts = input.split("\\s+", 2);
 		String keyword = parts[0];
@@ -156,6 +160,10 @@ public class UCI {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see uk.co.micaherne.unidexter.io.ChessProtocol#getCurrentPosition()
+	 */
+	@Override
 	public Position getCurrentPosition() {
 		return currentPosition;
 	}

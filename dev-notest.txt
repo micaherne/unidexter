@@ -1,0 +1,26 @@
+2014-08-07 21:53:58.022-->1:position startpos moves e2e4 b8c6 g1f3 g8f6 b1c3 e7e6 d2d4 f8b4 f1d3 b4c3 b2c3 f6g4 h2h3
+2014-08-07 21:53:58.022-->1:go wtime 281342 btime 296811 winc 0 binc 0
+2014-08-07 21:53:58.761<--1:bestmove g4f2
+
+This basically amounts to the computer giving away a knight for a pawn (it's also preventing castling and breaking up the kingside pawns, but the program doesn't know about those things yet!
+
+The FEN for this position is: r1bqk2r/pppp1ppp/2n1p3/8/3PP1n1/2PB1N1P/P1P2PP1/R1BQK2R b KQkq - 0 7 
+
+        // Was giving Nf2 in this position:
+        position = Position.fromFEN("r1bqk2r/pppp1ppp/2n1p3/8/3PP1n1/2PB1N1P/P1P2PP1/R1BQK2R b KQkq - 0 7");
+        search = new Search(position);
+        move = search.bestMove(4);
+        
+        assertNotEquals("g4f2", notation.toString(move));
+        
+        System.out.println(notation.toString(move));
+        
+The best move is g4f6
+
+Also
+
+2014-08-07 23:45:02.134-->1:position startpos moves g1f3 b8c6 e2e4 g8f6 e4e5 f6e4 f1d3 e4c5 d3f5 d7d5 e5d6 c8f5 d6c7 d8c7 d2d4 c5e4 e1g1 f5g4 d1d3
+2014-08-07 23:45:02.134-->1:go wtime 270718 btime 294529 winc 0 binc 0
+2014-08-07 23:45:03.587<--1:bestmove h7h5
+
+h5 is clearly not a good move as the knight is en prise.
