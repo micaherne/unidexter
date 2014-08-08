@@ -1,14 +1,21 @@
-package uk.co.micaherne.unidexter;
+package uk.co.micaherne.unidexter.search;
 
+import uk.co.micaherne.unidexter.MoveGenerator;
+import uk.co.micaherne.unidexter.Position;
 import uk.co.micaherne.unidexter.evaluation.Evaluation;
+import uk.co.micaherne.unidexter.io.ChessProtocol;
 
-public class Search {
+public class Search implements Runnable {
 	
 	public Position position;
 	public MoveGenerator moveGenerator;
 	public Evaluation evaluation;
 	
-	public int[] bestMove;
+	// For threading use
+	public int bestMove;
+	public int[] pv;
+	private int depth;
+	private ChessProtocol protocol;
 	
 	public Search(Position position) {
 		this.position = position;
@@ -17,27 +24,30 @@ public class Search {
 	}
 	
 	public int bestMove(int depth) {
-		// bestMove = new int[depth + 1];
-		// negamax(depth);
-		// negaMaxAlphaBeta(Integer.MIN_VALUE, Integer.MAX_VALUE, depth);
-		// return bestMove[depth];
 		return bestMoveNegamax(depth);
 	}
 	
 	public int bestMoveNegamax(int depth) {
-		int bestMove = 0;
+		bestMove = 0;
 		int max = Integer.MIN_VALUE;
 		int[] moves = moveGenerator.generateMoves();
 		for (int i = 1; i <= moves[0]; i++) {
 			if (position.move(moves[i])) {
+				// capture the first valid move in case interrupted
+				if (bestMove == 0) {
+					bestMove = moves[i];
+				}
+				
 				int score = -negamax(depth - 1);
 				if (score > max) {
 					bestMove = moves[i];
 					max = score;
 				}
+				
 				position.unmakeMove();
 			}
 		}
+		
 		// If no moves have worked, it's checkmate or stalemate
 		if (max == Integer.MIN_VALUE) {
 			return evaluation.evaluateTerminal(position, depth);
@@ -47,6 +57,9 @@ public class Search {
 	}
 	
 	public int negamax(int depth) {
+		if (Thread.interrupted()) {
+			throw new SearchInterruptException();
+		}
 		int max = Integer.MIN_VALUE;
 		if (depth == 0) {
 			if (position.whiteToMove) {
@@ -102,6 +115,24 @@ public class Search {
 		this.position = position;
 		moveGenerator.setPosition(position);
 		evaluation.setPosition(position);
+	}
+
+	@Override
+	public void run() {
+		try {
+			bestMove = bestMove(depth);
+		} catch (SearchInterruptException e) {
+			// just let it send the best move as normal
+		}
+		this.protocol.sendBestMove(bestMove);
+	}
+
+	public void setDepth(int depth) {
+		this.depth = depth;
+	}
+
+	public void setProtocol(ChessProtocol protocol) {
+		this.protocol = protocol;
 	}
 
 

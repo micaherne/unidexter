@@ -17,7 +17,7 @@ public class Engine {
 
 	public Engine() {
 		in = new BufferedReader(new InputStreamReader(System.in));
-		// protocol = new UCI();
+		protocol = new UCI(); // default to UCI
 	}
 	
 	public void startInput() {

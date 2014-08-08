@@ -8,8 +8,8 @@ import uk.co.micaherne.unidexter.Chess;
 import uk.co.micaherne.unidexter.FENException;
 import uk.co.micaherne.unidexter.NotationException;
 import uk.co.micaherne.unidexter.Position;
-import uk.co.micaherne.unidexter.Search;
 import uk.co.micaherne.unidexter.notation.LongAlgebraicNotation;
+import uk.co.micaherne.unidexter.search.Search;
 
 public class UCI implements ChessProtocol {
 
@@ -33,6 +33,7 @@ public class UCI implements ChessProtocol {
 	private Position currentPosition;
 	private LongAlgebraicNotation notation;
 	public Search search;
+	protected Thread searchThread;
 
 
 	public UCI() {
@@ -40,6 +41,7 @@ public class UCI implements ChessProtocol {
 		in = new BufferedReader(new InputStreamReader(System.in));
 		notation = new LongAlgebraicNotation();
 		search = new Search(currentPosition);
+		search.setProtocol(this);
 	}
 
 
@@ -78,8 +80,17 @@ public class UCI implements ChessProtocol {
 			commandUci(input);
 			return;
 		}
+		if("debug".equals(keyword)) {
+			doOutput("info string debug not implemented");
+		}
 		if("isready".equals(keyword)) {
 			commandIsReady(input);
+		}
+		if("setoption".equals(keyword)) {
+			doOutput("info string setoption not implemented");
+		}
+		if("register".equals(keyword)) {
+			doOutput("info string register not implemented");
 		}
 		if("ucinewgame".equals(keyword)) {
 			commandUciNewGame(input);
@@ -99,6 +110,18 @@ public class UCI implements ChessProtocol {
 			} catch (NotationException e) {
 				doOutput("info error searching for move " + e.getMessage());
 			}
+		}
+		if("stop".equals(keyword)) {
+			// interrupt the search thread if it's running
+			if (searchThread != null && searchThread.isAlive()) {
+				searchThread.interrupt();
+			}
+		}
+		if("ponderhit".equals(keyword)) {
+			doOutput("info string ponderhit not implemented");
+		}
+		if("quit".equals(keyword)) {
+			System.exit(0);
 		}
 		
 		// System.out.println(input);
@@ -134,7 +157,6 @@ public class UCI implements ChessProtocol {
 		if("startpos".equals(tokens[1])) {
 			try {
 				currentPosition = Position.fromFEN(Chess.START_POS_FEN);
-				search.setPosition(currentPosition);
 				if(tokens.length > 3 && "moves".equals(tokens[2])){
 					for(int i = 3; i < tokens.length; i++) {
 						int move = notation.parseMove(tokens[i]);
@@ -154,19 +176,21 @@ public class UCI implements ChessProtocol {
 		}
 	}
 	
-    private void commandGo(String input) throws NotationException {
-    	int bestMove = search.bestMove(4);
-		doOutput("bestmove " + notation.toString(bestMove));
+    private void commandGo(String input) {
+    	searchThread = new Thread(search);
+    	search.setDepth(5);
+    	search.setPosition(currentPosition);
+    	searchThread.start();
+    	// Thread calls sendBestMove() when finished or interrupted
 	}
+    
+    @Override
+	public void sendBestMove(int bestMove) {
+    	doOutput("bestmove " + notation.toString(bestMove));
+    }
 
-
-	/* (non-Javadoc)
-	 * @see uk.co.micaherne.unidexter.io.ChessProtocol#getCurrentPosition()
-	 */
-	@Override
 	public Position getCurrentPosition() {
 		return currentPosition;
 	}
 
-	
 }
