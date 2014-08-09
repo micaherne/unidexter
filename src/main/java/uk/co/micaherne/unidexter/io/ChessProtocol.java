@@ -1,5 +1,7 @@
 package uk.co.micaherne.unidexter.io;
 
+import uk.co.micaherne.unidexter.search.Line;
+
 
 public interface ChessProtocol {
 
@@ -7,6 +9,6 @@ public interface ChessProtocol {
 
 	public abstract void sendBestMove(int bestMove);
 	
-	public abstract void sendPrincipalVariation(int[] pv, int score, int depth);
+	public abstract void sendPrincipalVariation(Line line, int score, int depth);
 
 }

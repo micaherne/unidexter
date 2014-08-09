@@ -13,9 +13,10 @@ public class Search implements Runnable {
 	
 	// For threading use
 	public int bestMove;
-	public int[] pv;
+	// public int[] pv;
 	private int depth;
 	private ChessProtocol protocol;
+	private Line line;
 	
 	public Search(Position position) {
 		this.position = position;
@@ -24,12 +25,13 @@ public class Search implements Runnable {
 	}
 	
 	public int bestMove(int depth) {
-		return bestMoveNegamax(depth);
+		line = new Line();
+		return bestMoveNegamax(depth, line);
 	}
 	
-	public int bestMoveNegamax(int depth) {
+	public int bestMoveNegamax(int depth, Line pline) {
+		Line line = new Line();
 		bestMove = 0;
-		pv = new int[depth];
 		int max = Integer.MIN_VALUE;
 		int[] moves = moveGenerator.generateMoves();
 		for (int i = 1; i <= moves[0]; i++) {
@@ -40,18 +42,21 @@ public class Search implements Runnable {
 					bestMove = moves[i];
 				}
 				
-				int score = -negamax(depth - 1);
+				int score = -negamax(depth - 1, line);
 				if (score > max) {
+					max = score;
 					bestMove = moves[i];
-					pv[depth - 1] = moves[i];
+					pline.moves[0] = moves[i];
+					System.arraycopy(line.moves, 0, pline.moves, 1, line.moveCount);
+					pline.moveCount = line.moveCount + 1;
+					
 					if (protocol != null) {
 						if (position.whiteToMove) {
-							// protocol.sendPrincipalVariation(pv, -score, depth);
+							protocol.sendPrincipalVariation(this.line, -score, depth);
 						} else {
-							// protocol.sendPrincipalVariation(pv, score, depth);
+							protocol.sendPrincipalVariation(this.line, score, depth);
 						}
 					}
-					max = score;
 				}
 				
 				position.unmakeMove();
@@ -70,12 +75,15 @@ public class Search implements Runnable {
 		return bestMove;
 	}
 	
-	public int negamax(int depth) {
+	public int negamax(int depth, Line pline) {
+		Line line = new Line();
+		
 		if (Thread.interrupted()) {
 			throw new SearchInterruptException();
 		}
 		int max = Integer.MIN_VALUE;
 		if (depth == 0) {
+			pline.moveCount = 0;
 			if (position.whiteToMove) {
 				return evaluation.evaluate();
 			} else {
@@ -85,10 +93,12 @@ public class Search implements Runnable {
 		int[] moves = moveGenerator.generateMoves();
 		for (int i = 1; i <= moves[0]; i++) {
 			if (position.move(moves[i])) {
-				int score = -negamax(depth - 1);
+				int score = -negamax(depth - 1, line);
 				if (score > max) {
-					pv[depth - 1] = moves[i];
 					max = score;
+					pline.moves[0] = moves[i];
+					System.arraycopy(line.moves, 0, pline.moves, 1, line.moveCount);
+					pline.moveCount = line.moveCount + 1;
 				}
 				position.unmakeMove();
 			}

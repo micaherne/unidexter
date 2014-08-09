@@ -9,6 +9,7 @@ import uk.co.micaherne.unidexter.FENException;
 import uk.co.micaherne.unidexter.Position;
 import uk.co.micaherne.unidexter.notation.LongAlgebraicNotation;
 import uk.co.micaherne.unidexter.notation.NotationException;
+import uk.co.micaherne.unidexter.search.Line;
 import uk.co.micaherne.unidexter.search.Search;
 
 public class UCI implements ChessProtocol {
@@ -217,12 +218,12 @@ public class UCI implements ChessProtocol {
 
 
 	@Override
-	public void sendPrincipalVariation(int[] pv, int score, int depth) {
+	public void sendPrincipalVariation(Line line, int score, int depth) {
 		StringBuilder result = new StringBuilder("info pv ");
 		result.append("depth ").append(depth).append(" score cp ").append(score);
-		for (int i = pv.length - 1; i >= 0; i--) {
+		for (int i = 0; i < line.moveCount; i++) {
 			result.append(" ");
-			result.append(notation.toString(pv[i]));
+			result.append(notation.toString(line.moves[i]));
 		}
 		doOutput(result);
 	}

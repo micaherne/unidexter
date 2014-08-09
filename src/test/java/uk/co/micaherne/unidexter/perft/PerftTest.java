@@ -82,8 +82,8 @@ public class PerftTest {
 		// Position position = Position.fromFEN("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R4RK1 b kq - 1 1");
 		// Position position = Position.fromFEN("r3k2r/p1ppqpb1/bn2pnp1/1B1PN3/1p2P3/P1N2Q2/1PPB1PpP/R3K2R b KQkq - 1 1");
 		// Position position = Position.fromFEN("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -");
-		Position position = Position.fromFEN("r3k2N/p1ppq1b1/bn2pnp1/3P4/4P3/1pN2Q1p/PPPBBPPP/R3K2R b KQq - 0 2");
-		Map<String, Long> divide = Perft.divide(position, 1);
+		Position position = Position.fromFEN("r1bqk2r/pppp1ppp/2n1p3/8/3PP1n1/2PB1N1P/P1P2PP1/R1BQK2R b KQkq - 0 7");
+		Map<String, Long> divide = Perft.divide(position, 4);
 		long nodes = 0L;
 		for (String key : divide.keySet()) {
 			Long moveCount = divide.get(key);

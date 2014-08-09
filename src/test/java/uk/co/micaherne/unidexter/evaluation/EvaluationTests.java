@@ -20,6 +20,10 @@ public class EvaluationTests {
 		Position position = Position.fromFEN(Chess.START_POS_FEN);
 		Evaluation evaluation = new Evaluation(position);
 		assertEquals(0, evaluation.evaluate());
+		
+		position = Position.fromFEN("r1bqkbnr/pppppppp/n7/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2");
+		evaluation = new Evaluation(position);
+		assertEquals(0, evaluation.evaluate());
 	}
 	
 	@Test
