@@ -1,7 +1,6 @@
 package uk.co.micaherne.unidexter.notation;
 
 import uk.co.micaherne.unidexter.MoveUtils;
-import uk.co.micaherne.unidexter.NotationException;
 
 public class LongAlgebraicNotation extends AlgebraicNotation {
 	

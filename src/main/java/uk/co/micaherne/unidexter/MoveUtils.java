@@ -24,6 +24,18 @@ public class MoveUtils {
 		return from << 8 | to;
 	}
 	
+	/**
+	 * Create a move with basic flags set.
+	 * 
+	 * This should only ever be called with queening = true when creating a basic move
+	 * when generating all queening moves from a position.
+	 * 
+	 * @param from from square
+	 * @param to to square
+	 * @param queening is it a queening move?
+	 * @param enPassentCapture is it an e.p. capture
+	 * @return
+	 */
 	public static int create(int from, int to, boolean queening, boolean enPassentCapture) {
 		return from << 8 | to | (queening ? 1 << 24 : 0) | (enPassentCapture ? 1 << 25 : 0);
 	}

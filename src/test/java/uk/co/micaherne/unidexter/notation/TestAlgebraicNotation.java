@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import uk.co.micaherne.unidexter.Chess;
 import uk.co.micaherne.unidexter.MoveUtils;
-import uk.co.micaherne.unidexter.NotationException;
 
 public class TestAlgebraicNotation {
 	

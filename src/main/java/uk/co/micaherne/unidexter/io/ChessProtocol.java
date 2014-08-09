@@ -6,5 +6,7 @@ public interface ChessProtocol {
 	public abstract void doInput(String input) throws UCIException;
 
 	public abstract void sendBestMove(int bestMove);
+	
+	public abstract void sendPrincipalVariation(int[] pv, int score, int depth);
 
 }

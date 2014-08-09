@@ -4,6 +4,7 @@ import java.util.Stack;
 
 import uk.co.micaherne.unidexter.notation.AlgebraicNotation;
 import uk.co.micaherne.unidexter.notation.LongAlgebraicNotation;
+import uk.co.micaherne.unidexter.notation.NotationException;
 
 public class Position {
 	
@@ -149,6 +150,32 @@ public class Position {
 			builder.append("\n+-+-+-+-+-+-+-+-+\n");
 		}
 		return builder.toString();
+	}
+	
+	/**
+	 * Make the given move, updating it from the position beforehand if required.
+	 * 
+	 * This is intended for moves parsed from, for example, a UCI position command, where
+	 * only the from square and to square are set. The normal move method expects the following
+	 * extra data to be set, which must be determined from the position:
+	 * 
+	 * * captured piece
+	 * * 
+	 * @param move
+	 * @param updateFromPosition
+	 * @return
+	 */
+	public boolean move(int move, boolean updateFromPosition) {
+		if (!updateFromPosition) {
+			// This should never be called like this
+			return move(move);
+		}
+		int fromSquare = MoveUtils.fromSquare(move);
+		int toSquare = MoveUtils.toSquare(move);
+		if ((epSquare & (1L << toSquare)) != 0 && ((board[fromSquare] & 7) == Chess.Piece.PAWN)) {
+			move |= (1 << 25);
+		}
+		return move(move);
 	}
 
 	/**

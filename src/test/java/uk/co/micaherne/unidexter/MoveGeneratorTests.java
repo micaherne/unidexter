@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.micaherne.unidexter.notation.LongAlgebraicNotation;
+import uk.co.micaherne.unidexter.notation.NotationException;
 
 public class MoveGeneratorTests {
 

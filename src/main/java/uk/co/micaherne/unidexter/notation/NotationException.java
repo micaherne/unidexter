@@ -1,4 +1,4 @@
-package uk.co.micaherne.unidexter;
+package uk.co.micaherne.unidexter.notation;
 
 public class NotationException extends RuntimeException {
 

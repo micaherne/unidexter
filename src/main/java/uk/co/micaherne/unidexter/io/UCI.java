@@ -6,9 +6,9 @@ import java.io.InputStreamReader;
 
 import uk.co.micaherne.unidexter.Chess;
 import uk.co.micaherne.unidexter.FENException;
-import uk.co.micaherne.unidexter.NotationException;
 import uk.co.micaherne.unidexter.Position;
 import uk.co.micaherne.unidexter.notation.LongAlgebraicNotation;
+import uk.co.micaherne.unidexter.notation.NotationException;
 import uk.co.micaherne.unidexter.search.Search;
 
 public class UCI implements ChessProtocol {
@@ -30,7 +30,7 @@ public class UCI implements ChessProtocol {
 	 */
 	
 	BufferedReader in;
-	private Position currentPosition;
+	private Position position;
 	private LongAlgebraicNotation notation;
 	public Search search;
 	protected Thread searchThread;
@@ -40,7 +40,7 @@ public class UCI implements ChessProtocol {
 		super();
 		in = new BufferedReader(new InputStreamReader(System.in));
 		notation = new LongAlgebraicNotation();
-		search = new Search(currentPosition);
+		search = new Search(position);
 		search.setProtocol(this);
 	}
 
@@ -127,7 +127,7 @@ public class UCI implements ChessProtocol {
 		// System.out.println(input);
 	}
 	
-	private void doOutput(Object output) {
+	private void doOutput(CharSequence output) {
 		System.out.println(output);
 	}
 	
@@ -156,11 +156,12 @@ public class UCI implements ChessProtocol {
 		}
 		if("startpos".equals(tokens[1])) {
 			try {
-				currentPosition = Position.fromFEN(Chess.START_POS_FEN);
+				position = Position.fromFEN(Chess.START_POS_FEN);
 				if(tokens.length > 3 && "moves".equals(tokens[2])){
 					for(int i = 3; i < tokens.length; i++) {
 						int move = notation.parseMove(tokens[i]);
-						currentPosition.move(move);
+						// update move from position if necessary, then move
+						position.move(move, true);
 					}
 				}
 			} catch (FENException e) {
@@ -177,9 +178,9 @@ public class UCI implements ChessProtocol {
 	}
 	
     private void commandGo(String input) {
+    	search.setDepth(4);
+    	search.setPosition(position);
     	searchThread = new Thread(search);
-    	search.setDepth(5);
-    	search.setPosition(currentPosition);
     	searchThread.start();
     	// Thread calls sendBestMove() when finished or interrupted
 	}
@@ -189,8 +190,20 @@ public class UCI implements ChessProtocol {
     	doOutput("bestmove " + notation.toString(bestMove));
     }
 
-	public Position getCurrentPosition() {
-		return currentPosition;
+	public Position getPosition() {
+		return position;
+	}
+
+
+	@Override
+	public void sendPrincipalVariation(int[] pv, int score, int depth) {
+		StringBuilder result = new StringBuilder("info pv ");
+		result.append("depth ").append(depth).append(" score cp ").append(score);
+		for (int i = pv.length - 1; i >= 0; i--) {
+			result.append(" ");
+			result.append(notation.toString(pv[i]));
+		}
+		doOutput(result);
 	}
 
 }

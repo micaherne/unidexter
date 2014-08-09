@@ -29,10 +29,12 @@ public class Search implements Runnable {
 	
 	public int bestMoveNegamax(int depth) {
 		bestMove = 0;
+		pv = new int[depth];
 		int max = Integer.MIN_VALUE;
 		int[] moves = moveGenerator.generateMoves();
 		for (int i = 1; i <= moves[0]; i++) {
 			if (position.move(moves[i])) {
+				
 				// capture the first valid move in case interrupted
 				if (bestMove == 0) {
 					bestMove = moves[i];
@@ -41,6 +43,14 @@ public class Search implements Runnable {
 				int score = -negamax(depth - 1);
 				if (score > max) {
 					bestMove = moves[i];
+					pv[depth - 1] = moves[i];
+					if (protocol != null) {
+						if (position.whiteToMove) {
+							// protocol.sendPrincipalVariation(pv, -score, depth);
+						} else {
+							// protocol.sendPrincipalVariation(pv, score, depth);
+						}
+					}
 					max = score;
 				}
 				
@@ -50,7 +60,11 @@ public class Search implements Runnable {
 		
 		// If no moves have worked, it's checkmate or stalemate
 		if (max == Integer.MIN_VALUE) {
-			return evaluation.evaluateTerminal(position, depth);
+			if (position.whiteToMove) {
+				return evaluation.evaluateTerminal(position, depth);
+			} else {
+				return -evaluation.evaluateTerminal(position, depth);
+			}
 		}
 		
 		return bestMove;
@@ -73,6 +87,7 @@ public class Search implements Runnable {
 			if (position.move(moves[i])) {
 				int score = -negamax(depth - 1);
 				if (score > max) {
+					pv[depth - 1] = moves[i];
 					max = score;
 				}
 				position.unmakeMove();
@@ -81,34 +96,14 @@ public class Search implements Runnable {
 		
 		// If no moves have worked, it's checkmate or stalemate
 		if (max == Integer.MIN_VALUE) {
-			return evaluation.evaluateTerminal(position, depth);
+			if (position.whiteToMove) {
+				return evaluation.evaluateTerminal(position, depth);
+			} else {
+				return -evaluation.evaluateTerminal(position, depth);
+			}
+			
 		}
 		return max;
-	}
-		
-	public int negaMaxAlphaBeta(int alpha, int beta, int depth) {
-		if (depth == 0) {
-			if (position.whiteToMove) {
-				return evaluation.evaluate();
-			} else {
-				return -evaluation.evaluate();
-			}
-		}
-		int[] moves = moveGenerator.generateMoves();
-		for (int i = 1; i < moves[0]; i++) {
-			if (position.move(moves[i])) {
-				int score = -negaMaxAlphaBeta(-beta, -alpha, depth - 1);
-				if (score >= beta) {
-					position.unmakeMove();
-					return beta;
-				}
-				if (score > alpha) {
-					alpha = score;
-				}
-				position.unmakeMove();
-			}
-		}
-		return alpha;
 	}
 
 	public void setPosition(Position position) {

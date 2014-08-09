@@ -1,14 +1,13 @@
 package uk.co.micaherne.unidexter.evaluation;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import uk.co.micaherne.unidexter.Chess;
-import uk.co.micaherne.unidexter.NotationException;
 import uk.co.micaherne.unidexter.Position;
-import uk.co.micaherne.unidexter.evaluation.Evaluation;
+import uk.co.micaherne.unidexter.notation.NotationException;
 
 public class EvaluationTests {
 

@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import uk.co.micaherne.unidexter.NotationException;
 import uk.co.micaherne.unidexter.Position;
+import uk.co.micaherne.unidexter.notation.NotationException;
 
 /**
  * Compare perft results against the file supplied by roce

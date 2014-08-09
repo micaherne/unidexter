@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import uk.co.micaherne.unidexter.MoveGenerator;
-import uk.co.micaherne.unidexter.NotationException;
 import uk.co.micaherne.unidexter.Position;
 import uk.co.micaherne.unidexter.notation.LongAlgebraicNotation;
+import uk.co.micaherne.unidexter.notation.NotationException;
 
 public class Perft {
 

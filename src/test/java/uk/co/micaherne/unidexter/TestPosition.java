@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import uk.co.micaherne.unidexter.notation.NotationException;
 import uk.co.micaherne.unidexter.perft.Perft;
 
 public class TestPosition {

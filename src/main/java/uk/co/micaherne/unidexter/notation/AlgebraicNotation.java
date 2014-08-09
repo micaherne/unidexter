@@ -1,7 +1,6 @@
 package uk.co.micaherne.unidexter.notation;
 
 import uk.co.micaherne.unidexter.Chess;
-import uk.co.micaherne.unidexter.NotationException;
 
 public abstract class AlgebraicNotation {
 		
