@@ -61,9 +61,9 @@ public class Search implements Runnable {
 		// If no moves have worked, it's checkmate or stalemate
 		if (max == Integer.MIN_VALUE) {
 			if (position.whiteToMove) {
-				return evaluation.evaluateTerminal(position, depth);
+				return evaluation.evaluateTerminal(depth);
 			} else {
-				return -evaluation.evaluateTerminal(position, depth);
+				return -evaluation.evaluateTerminal(depth);
 			}
 		}
 		
@@ -97,9 +97,9 @@ public class Search implements Runnable {
 		// If no moves have worked, it's checkmate or stalemate
 		if (max == Integer.MIN_VALUE) {
 			if (position.whiteToMove) {
-				return evaluation.evaluateTerminal(position, depth);
+				return evaluation.evaluateTerminal(depth);
 			} else {
-				return -evaluation.evaluateTerminal(position, depth);
+				return -evaluation.evaluateTerminal(depth);
 			}
 			
 		}

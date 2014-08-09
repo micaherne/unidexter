@@ -44,11 +44,14 @@ public class Evaluation {
 	/**
 	 * Evaluate a position for which there are no legal moves (i.e. a checkmate or stalemate)
 	 * 
-	 * @param position2
+	 * We pass depth to this to make "near" checkmates score worse than "far" ones.
+	 * 
 	 * @param depth
+	 * @param position2
+	 * 
 	 * @return
 	 */
-	public int evaluateTerminal(Position position, int depth) {
+	public int evaluateTerminal(int depth) {
 		if (position.whiteToMove && position.inCheck(Colour.WHITE)) {
 			return (Integer.MIN_VALUE / 2 - depth);
 		} else if (!position.whiteToMove && position.inCheck(Colour.BLACK)) {
