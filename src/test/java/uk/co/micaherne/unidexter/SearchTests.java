@@ -32,7 +32,7 @@ public class SearchTests {
 		 // Was giving Nf2 in this position:
         position = Position.fromFEN("r1bqk2r/pppp1ppp/2n1p3/8/3PP1n1/2PB1N1P/P1P2PP1/R1BQK2R b KQkq - 0 7");
         search = new Search(position);
-        move = search.bestMove(3);
+        move = search.bestMove(4);
         
         assertNotEquals("g4f2", notation.toString(move));
         
@@ -59,5 +59,14 @@ public class SearchTests {
 		System.out.println(BitboardUtils.toString(position.pieceBitboards[Chess.Piece.QUEEN]));
 		System.out.println(BitboardUtils.toString(position.colourBitboards[Chess.Colour.BLACK]));*/
 		
+	}
+	
+	@Test
+	public void testBroken2() throws UCIException {
+		UCI uci = new UCI();
+		uci.doInput("position startpos moves e2e4 b8c6 g1f3 g8f6 e4e5 f6e4 d2d3 e4c5 c1e3 c5e6 b1c3 d7d6 e5d6 c7d6 f3g5 e6g5 e3g5 d8a5 g5d2 c6d4 c3e4 a5d5 f2f3 c8f5 f1e2 f5e4 f3e4 d5b5 d2c3 d4e2 d1e2 e7e6 e1g1 a7a5 e2f3 b5b6 g1h1 f7f6 c3f6 g7f6 f3f6 h8g8 f6f7 e8d8 f7g8 d8c7 f1f7 c7c6 f7f8 b6b2 a1f1 a8f8 g8f8 b2a2 f8c8 c6b6 g2g4 a5a4 c8c3 e6e5 h1g2 a4a3 g2h3 a2b2 c3b2 a3b2 f1b1 h7h6 b1b2 b6a5 h3h4 b7b5 h4h5 b5b4 h5h6 a5a4 g4g5 a4a3 b2b1 a3a2 b1b4 a2a1 g5g6 d6d5 e4d5 e5e4 d3e4 a1a2 g6g7 a2a3 c2c3 a3a2 g7g8q");
+		Position position = uci.getPosition();
+		assertEquals(Chess.Piece.White.QUEEN, position.board[62]);
+		System.out.println(position);
 	}
 }

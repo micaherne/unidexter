@@ -160,7 +160,11 @@ public class Position {
 	 * extra data to be set, which must be determined from the position:
 	 * 
 	 * * captured piece
-	 * * 
+	 * * colour of promoted piece
+	 * 
+	 * There is no real need to try to make this method perform really well, as it's only intended
+	 * for parsed input, so won't be called very often.
+	 * 
 	 * @param move
 	 * @param updateFromPosition
 	 * @return
@@ -174,6 +178,15 @@ public class Position {
 		int toSquare = MoveUtils.toSquare(move);
 		if ((epSquare & (1L << toSquare)) != 0 && ((board[fromSquare] & 7) == Chess.Piece.PAWN)) {
 			move |= (1 << 25);
+		}
+		if (MoveUtils.isQueening(move)) {
+			// make sure promotedPiece is the same colour as moved piece
+			int movedPiece = board[fromSquare];
+			if ((movedPiece & 8) != (MoveUtils.promotedPiece(move) & 8)) {
+				int actualPromotedPiece = (movedPiece & 8) | MoveUtils.promotedPiece(move) & 7;
+				move = MoveUtils.create(fromSquare, toSquare, actualPromotedPiece);
+			}
+			
 		}
 		return move(move);
 	}

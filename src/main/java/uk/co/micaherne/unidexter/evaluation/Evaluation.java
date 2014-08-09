@@ -26,18 +26,18 @@ public class Evaluation {
 	public int evaluate() {
 		int result = 0;
 		
-		result += 100 * materialDifference(Chess.Piece.PAWN);
-		result += 300 * materialDifference(Chess.Piece.KNIGHT);
-		result += 300 * materialDifference(Chess.Piece.BISHOP);
-		result += 500 * materialDifference(Chess.Piece.ROOK);
-		result += 900 * materialDifference(Chess.Piece.QUEEN);
+		result += (100 * materialDifference(Chess.Piece.PAWN));
+		result += (300 * materialDifference(Chess.Piece.KNIGHT));
+		result += (310 * materialDifference(Chess.Piece.BISHOP));
+		result += (500 * materialDifference(Chess.Piece.ROOK));
+		result += (900 * materialDifference(Chess.Piece.QUEEN));
 		
-		/*// Add results from piece square tables
-		result += pieceSquare(Chess.Piece.PAWN, Chess.Colour.WHITE) - pieceSquare(Chess.Piece.PAWN, Chess.Colour.BLACK);
-		result += pieceSquare(Chess.Piece.KNIGHT, Chess.Colour.WHITE) - pieceSquare(Chess.Piece.KNIGHT, Chess.Colour.BLACK);
-		result += pieceSquare(Chess.Piece.BISHOP, Chess.Colour.WHITE) - pieceSquare(Chess.Piece.BISHOP, Chess.Colour.BLACK);
-		result += pieceSquare(Chess.Piece.QUEEN, Chess.Colour.WHITE) - pieceSquare(Chess.Piece.QUEEN, Chess.Colour.BLACK);
-		*/
+		// Add results from piece square tables
+		result += (pieceSquare(Chess.Piece.PAWN, Chess.Colour.WHITE) - pieceSquare(Chess.Piece.PAWN, Chess.Colour.BLACK));
+		result += (pieceSquare(Chess.Piece.KNIGHT, Chess.Colour.WHITE) - pieceSquare(Chess.Piece.KNIGHT, Chess.Colour.BLACK));
+		result += (pieceSquare(Chess.Piece.BISHOP, Chess.Colour.WHITE) - pieceSquare(Chess.Piece.BISHOP, Chess.Colour.BLACK));
+		result += (pieceSquare(Chess.Piece.QUEEN, Chess.Colour.WHITE) - pieceSquare(Chess.Piece.QUEEN, Chess.Colour.BLACK));
+
 		return result;
 	}
 	
