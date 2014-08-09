@@ -170,8 +170,29 @@ public class UCI implements ChessProtocol {
 			}
 		} else if("fen".equals(tokens[1])) {
 			/* Think we're looking for everything after fen 
-			 * until the word "move" or end of line
+			 * until the word "moves" or end of line
 			 */
+			StringBuffer fen = new StringBuffer();
+			int i = 2;
+			for (i = 2; i < tokens.length; i++) {
+				if ("moves".equals(tokens[i])) {
+					break;
+				}
+				fen.append(tokens[i]).append(" ");
+			}
+			try {
+				position = Position.fromFEN(fen.toString());
+				if(i < tokens.length){
+					for(int j = i + 1; j < tokens.length; j++) {
+						int move = notation.parseMove(tokens[j]);
+						// update move from position if necessary, then move
+						position.move(move, true);
+					}
+				}
+			} catch (FENException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
 			throw new UCIException("Position must be startpos or fen");
 		}
