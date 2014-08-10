@@ -1,10 +1,17 @@
-package uk.co.micaherne.unidexter;
+package uk.co.micaherne.unidexter.search;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import uk.co.micaherne.unidexter.Chess;
+import uk.co.micaherne.unidexter.MoveGenerator;
+import uk.co.micaherne.unidexter.MoveUtils;
+import uk.co.micaherne.unidexter.Position;
+import uk.co.micaherne.unidexter.Chess.Piece;
+import uk.co.micaherne.unidexter.Chess.Square;
+import uk.co.micaherne.unidexter.Chess.Piece.White;
 import uk.co.micaherne.unidexter.io.UCI;
 import uk.co.micaherne.unidexter.io.UCIException;
 import uk.co.micaherne.unidexter.notation.LongAlgebraicNotation;
@@ -68,5 +75,13 @@ public class SearchTests {
 		Position position = uci.getPosition();
 		assertEquals(Chess.Piece.White.QUEEN, position.board[62]);
 		System.out.println(position);
+	}
+	
+	@Test
+	public void testAlphaBeta() {
+		Position position = Position.fromFEN(Chess.START_POS_FEN);
+		Search search = new Search(position);
+		Line pline = new Line();
+		int score = search.alphaBeta(4, Integer.MIN_VALUE + 100, Integer.MAX_VALUE - 100, pline);
 	}
 }
