@@ -210,6 +210,13 @@ public class MoveGenerator {
 		return moves;
 	}
 	
+	/**
+	 * Generate all capture moves.
+	 * 
+	 * @param moves array of moves
+	 * @param moveCount number of existing moves in array
+	 * @return new number of moves
+	 */
 	public int generateCaptures(int[] moves, int moveCount) {
 		
 		int colourToMove = position.whiteToMove ? Chess.Colour.WHITE : Chess.Colour.BLACK;
@@ -275,6 +282,13 @@ public class MoveGenerator {
 		return moveCount;
 	}
 
+	/**
+	 * Generate all non-capture moves.
+	 * 
+	 * @param moves array of moves
+	 * @param moveCount number of existing moves in array
+	 * @return new number of moves
+	 */
 	public int generateNonCaptures(int[] moves, int moveCount) {
 				
 		int colourToMove = position.whiteToMove ? Chess.Colour.WHITE : Chess.Colour.BLACK;
