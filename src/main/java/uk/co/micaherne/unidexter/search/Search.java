@@ -4,7 +4,6 @@ import java.util.Date;
 
 import uk.co.micaherne.unidexter.MoveGenerator;
 import uk.co.micaherne.unidexter.Position;
-import uk.co.micaherne.unidexter.Chess.Colour;
 import uk.co.micaherne.unidexter.evaluation.Evaluation;
 import uk.co.micaherne.unidexter.io.ChessProtocol;
 
@@ -23,8 +22,6 @@ public class Search implements Runnable {
 	private long nodes;
 	private Date searchStarted;
 	
-	public int mySide; // the colour the computer is playing (for pv info)
-
 	public Search(Position position) {
 		this.position = position;
 		this.moveGenerator = new MoveGenerator(position);
@@ -36,15 +33,13 @@ public class Search implements Runnable {
 		// return bestMoveNegamax(depth, line);
 		// NB: This method can't be interrupted, unlike the above one
 		// int score = negamax(depth, principalVariation);
-		
-		mySide = position.whiteToMove ? Colour.WHITE : Colour.BLACK;
-		
+				
 		// Set up info variables
 		nodes = 0;
 		searchStarted = new Date();
 		
 		// Using actual min and max value causes problems when negating
-		int score = alphaBeta(depth, Integer.MIN_VALUE + 100, Integer.MAX_VALUE - 100, principalVariation);
+		alphaBeta(depth, Integer.MIN_VALUE + 100, Integer.MAX_VALUE - 100, principalVariation);
 		return principalVariation.moves[0];
 	}
 
@@ -192,13 +187,13 @@ public class Search implements Runnable {
 
 					if (protocol != null
 							&& pline == this.principalVariation) {
-						if (mySide == Colour.WHITE) {
+						//if (whiteToMove = position.whiteToMove) {
 							protocol.sendPrincipalVariation(this.principalVariation, score,
 									depth, nodes, searchStarted);
-						} else {
-							protocol.sendPrincipalVariation(this.principalVariation, -score,
-									depth, nodes, searchStarted);
-						}
+						//} else {
+						//	protocol.sendPrincipalVariation(this.principalVariation, -score,
+						//			depth, nodes, searchStarted);
+						//}
 					}
 				}
 			}

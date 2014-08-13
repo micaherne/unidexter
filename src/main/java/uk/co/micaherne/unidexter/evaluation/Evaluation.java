@@ -1,9 +1,8 @@
 package uk.co.micaherne.unidexter.evaluation;
 
 import uk.co.micaherne.unidexter.Chess;
-import uk.co.micaherne.unidexter.Position;
 import uk.co.micaherne.unidexter.Chess.Colour;
-import uk.co.micaherne.unidexter.Chess.Piece;
+import uk.co.micaherne.unidexter.Position;
 
 public class Evaluation {
 	

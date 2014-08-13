@@ -222,7 +222,7 @@ public class UCI implements ChessProtocol {
 	public void sendPrincipalVariation(Line line, int score, int depth, long nodes, Date timeStarted) {
 		long timeTaken = new Date().getTime() - timeStarted.getTime(); // milliseconds
 		StringBuilder result = new StringBuilder("info ");
-		result.append("depth ").append(depth).append(" score cp ").append(score).append(" time ")
+		result.append("depth ").append(line.moveCount).append(" score cp ").append(score).append(" time ")
 			.append(timeTaken).append(" nodes ").append(nodes);
 		if (timeTaken> 0) {
 			result.append(" nps ").append((long) ((float) nodes / timeTaken) * 1000);
