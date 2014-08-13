@@ -3,6 +3,7 @@ package uk.co.micaherne.unidexter.io;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Date;
 
 import uk.co.micaherne.unidexter.Chess;
 import uk.co.micaherne.unidexter.FENException;
@@ -218,9 +219,10 @@ public class UCI implements ChessProtocol {
 
 
 	@Override
-	public void sendPrincipalVariation(Line line, int score, int depth) {
+	public void sendPrincipalVariation(Line line, int score, int depth, long nodes, Date timeStarted) {
+		long timeTaken = new Date().getTime() - timeStarted.getTime(); // milliseconds
 		StringBuilder result = new StringBuilder("info pv ");
-		result.append("depth ").append(depth).append(" score cp ").append(score);
+		result.append("depth ").append(depth).append(" score cp ").append(score).append(" nodes ").append(nodes).append(" nps ").append(nodes / (timeTaken / 1000));
 		for (int i = 0; i < line.moveCount; i++) {
 			result.append(" ");
 			result.append(notation.toString(line.moves[i]));

@@ -1,5 +1,7 @@
 package uk.co.micaherne.unidexter.search;
 
+import java.util.Date;
+
 import uk.co.micaherne.unidexter.MoveGenerator;
 import uk.co.micaherne.unidexter.Position;
 import uk.co.micaherne.unidexter.Chess.Colour;
@@ -18,6 +20,8 @@ public class Search implements Runnable {
 	private int depth;
 	private ChessProtocol protocol;
 	private Line principalVariation;
+	private long nodes;
+	private Date searchStarted;
 	
 	public int mySide; // the colour the computer is playing (for pv info)
 
@@ -34,6 +38,10 @@ public class Search implements Runnable {
 		// int score = negamax(depth, principalVariation);
 		
 		mySide = position.whiteToMove ? Colour.WHITE : Colour.BLACK;
+		
+		// Set up info variables
+		nodes = 0;
+		searchStarted = new Date();
 		
 		// Using actual min and max value causes problems when negating
 		int score = alphaBeta(depth, Integer.MIN_VALUE + 100, Integer.MAX_VALUE - 100, principalVariation);
@@ -65,10 +73,10 @@ public class Search implements Runnable {
 					if (protocol != null) {
 						if (position.whiteToMove) {
 							protocol.sendPrincipalVariation(this.principalVariation, -score,
-									depth);
+									depth, nodes, searchStarted);
 						} else {
 							protocol.sendPrincipalVariation(this.principalVariation, score,
-									depth);
+									depth, nodes, searchStarted);
 						}
 					}
 				}
@@ -108,6 +116,7 @@ public class Search implements Runnable {
 		int[] moves = moveGenerator.generateMoves();
 		for (int i = 1; i <= moves[0]; i++) {
 			if (position.move(moves[i])) {
+				
 				int score = -negamax(depth - 1, line);
 				position.unmakeMove();
 				
@@ -122,10 +131,10 @@ public class Search implements Runnable {
 							&& pline == this.principalVariation) {
 						if (position.whiteToMove) {
 							protocol.sendPrincipalVariation(this.principalVariation, -score,
-									depth);
+									depth, nodes, searchStarted);
 						} else {
 							protocol.sendPrincipalVariation(this.principalVariation, score,
-									depth);
+									depth, nodes, searchStarted);
 						}
 					}
 				}
@@ -153,6 +162,7 @@ public class Search implements Runnable {
 		}
 		
 		if (depth == 0) {
+			nodes++; // just count evaluated nodes
 			pline.moveCount = 0;
 			if (position.whiteToMove) {
 				return evaluation.evaluate();
@@ -184,10 +194,10 @@ public class Search implements Runnable {
 							&& pline == this.principalVariation) {
 						if (mySide == Colour.WHITE) {
 							protocol.sendPrincipalVariation(this.principalVariation, score,
-									depth);
+									depth, nodes, searchStarted);
 						} else {
 							protocol.sendPrincipalVariation(this.principalVariation, -score,
-									depth);
+									depth, nodes, searchStarted);
 						}
 					}
 				}
