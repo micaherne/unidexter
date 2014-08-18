@@ -23,9 +23,11 @@ public class Position {
 	public int moves = 0;
 	public int halfMoves = 0;
 	
-	public long epSquare = 0; // en passent square as a bitboard
+	public long epSquare = 0L; // en passent square as a bitboard
 	
 	public boolean whiteToMove = false;
+	
+	public long zobristHash = 0L;
 	
 	/**
 	 * The stack of undo data for the moves that have been made so far.

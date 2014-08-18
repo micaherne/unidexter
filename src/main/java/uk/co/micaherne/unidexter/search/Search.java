@@ -30,10 +30,7 @@ public class Search implements Runnable {
 
 	public int bestMove(int depth) {
 		principalVariation = new Line();
-		// return bestMoveNegamax(depth, line);
-		// NB: This method can't be interrupted, unlike the above one
-		// int score = negamax(depth, principalVariation);
-				
+		
 		// Set up info variables
 		nodes = 0;
 		searchStarted = new Date();
@@ -41,112 +38,6 @@ public class Search implements Runnable {
 		// Using actual min and max value causes problems when negating
 		alphaBeta(depth, Integer.MIN_VALUE + 100, Integer.MAX_VALUE - 100, principalVariation);
 		return principalVariation.moves[0];
-	}
-
-	public int bestMoveNegamax(int depth, Line pline) {
-		Line line = new Line();
-		bestMove = 0;
-		int max = Integer.MIN_VALUE;
-		int[] moves = moveGenerator.generateMoves();
-		for (int i = 1; i <= moves[0]; i++) {
-			if (position.move(moves[i])) {
-
-				// capture the first valid move in case interrupted
-				if (bestMove == 0) {
-					bestMove = moves[i];
-				}
-
-				int score = -negamax(depth - 1, line);
-				if (score > max) {
-					max = score;
-					bestMove = moves[i];
-					pline.moves[0] = moves[i];
-					System.arraycopy(line.moves, 0, pline.moves, 1,
-							line.moveCount);
-					pline.moveCount = line.moveCount + 1;
-
-					if (protocol != null) {
-						if (position.whiteToMove) {
-							protocol.sendPrincipalVariation(this.principalVariation, -score,
-									depth, nodes, searchStarted);
-						} else {
-							protocol.sendPrincipalVariation(this.principalVariation, score,
-									depth, nodes, searchStarted);
-						}
-					}
-				}
-
-				position.unmakeMove();
-			}
-		}
-
-		// If no moves have worked, it's checkmate or stalemate
-		if (max == Integer.MIN_VALUE) {
-			if (position.whiteToMove) {
-				return evaluation.evaluateTerminal(depth);
-			} else {
-				return -evaluation.evaluateTerminal(depth);
-			}
-		}
-
-		return bestMove;
-	}
-
-	public int negamax(int depth, Line pline) {
-		Line line = new Line();
-
-		if (Thread.interrupted()) {
-			throw new SearchInterruptException();
-		}
-		
-		int max = Integer.MIN_VALUE;
-		if (depth == 0) {
-			pline.moveCount = 0;
-			if (position.whiteToMove) {
-				return evaluation.evaluate();
-			} else {
-				return -evaluation.evaluate();
-			}
-		}
-		int[] moves = moveGenerator.generateMoves();
-		for (int i = 1; i <= moves[0]; i++) {
-			if (position.move(moves[i])) {
-				
-				int score = -negamax(depth - 1, line);
-				position.unmakeMove();
-				
-				if (score > max) {
-					max = score;
-					pline.moves[0] = moves[i];
-					System.arraycopy(line.moves, 0, pline.moves, 1,
-							line.moveCount);
-					pline.moveCount = line.moveCount + 1;
-
-					if (protocol != null
-							&& pline == this.principalVariation) {
-						if (position.whiteToMove) {
-							protocol.sendPrincipalVariation(this.principalVariation, -score,
-									depth, nodes, searchStarted);
-						} else {
-							protocol.sendPrincipalVariation(this.principalVariation, score,
-									depth, nodes, searchStarted);
-						}
-					}
-				}
-				
-			}
-		}
-
-		// If no moves have worked, it's checkmate or stalemate
-		if (max == Integer.MIN_VALUE) {
-			if (position.whiteToMove) {
-				return evaluation.evaluateTerminal(depth);
-			} else {
-				return -evaluation.evaluateTerminal(depth);
-			}
-
-		}
-		return max;
 	}
 	
 	public int alphaBeta(int depth, int alpha, int beta, Line pline) {
@@ -187,13 +78,9 @@ public class Search implements Runnable {
 
 					if (protocol != null
 							&& pline == this.principalVariation) {
-						//if (whiteToMove = position.whiteToMove) {
 							protocol.sendPrincipalVariation(this.principalVariation, score,
 									depth, nodes, searchStarted);
-						//} else {
-						//	protocol.sendPrincipalVariation(this.principalVariation, -score,
-						//			depth, nodes, searchStarted);
-						//}
+
 					}
 				}
 			}
