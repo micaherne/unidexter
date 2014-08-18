@@ -2,9 +2,13 @@ package uk.co.micaherne.unidexter.search;
 
 import java.util.Date;
 
+import uk.co.micaherne.unidexter.MemoryManagement;
 import uk.co.micaherne.unidexter.MoveGenerator;
 import uk.co.micaherne.unidexter.Position;
 import uk.co.micaherne.unidexter.evaluation.Evaluation;
+import uk.co.micaherne.unidexter.hashing.TranspositionTable;
+import uk.co.micaherne.unidexter.hashing.TranspositionTableEntry;
+import uk.co.micaherne.unidexter.hashing.Zobrist;
 import uk.co.micaherne.unidexter.io.ChessProtocol;
 
 public class Search implements Runnable {
@@ -12,6 +16,7 @@ public class Search implements Runnable {
 	public Position position;
 	public MoveGenerator moveGenerator;
 	public Evaluation evaluation;
+	public TranspositionTable transpositionTable;
 
 	// For threading use
 	public int bestMove;
@@ -22,13 +27,21 @@ public class Search implements Runnable {
 	private long nodes;
 	private Date searchStarted;
 	
+	// Do we want to use the transposition table?
+	private static final boolean USE_TT = true;
+	
 	public Search(Position position) {
 		this.position = position;
 		this.moveGenerator = new MoveGenerator(position);
 		this.evaluation = new Evaluation(position);
+		if (USE_TT) {
+			this.transpositionTable = new TranspositionTable(MemoryManagement.getTranspositiontablesize());
+			Zobrist.init();
+		}
 	}
 
 	public int bestMove(int depth) {
+		this.depth = depth;
 		principalVariation = new Line();
 		
 		// Set up info variables
@@ -45,6 +58,30 @@ public class Search implements Runnable {
 
 		if (Thread.interrupted()) {
 			throw new SearchInterruptException();
+		}
+		
+		if (USE_TT) {
+			TranspositionTableEntry entry = transpositionTable.get(Zobrist.hashForPosition(position));
+			if (entry != null) {
+				if (entry.depth >= depth) {
+					switch (entry.type) {
+						case TranspositionTableEntry.LOWER:
+							if (entry.score >= beta) {
+								return beta;
+							}
+							break;
+						case TranspositionTableEntry.UPPER:
+							if (entry.score < alpha) {
+								return alpha;
+							}
+							break;
+						case TranspositionTableEntry.EXACT:
+							if (entry.score > alpha && entry.score < beta) {
+								return entry.score;
+							}
+					}
+				}
+			}
 		}
 		
 		if (depth == 0) {
@@ -66,6 +103,10 @@ public class Search implements Runnable {
 				position.unmakeMove();
 				
 				if (score >= beta) {
+					if (USE_TT) {
+						TranspositionTableEntry entry = new TranspositionTableEntry(Zobrist.hashForPosition(position), moves[i], depth, score, TranspositionTableEntry.LOWER, 0);
+						transpositionTable.add(entry);
+					}
 					return beta;
 				}
 				if (score > alpha) {
@@ -81,6 +122,16 @@ public class Search implements Runnable {
 							protocol.sendPrincipalVariation(this.principalVariation, score,
 									depth, nodes, searchStarted);
 
+					}
+					
+					if (USE_TT) {
+						TranspositionTableEntry entry = new TranspositionTableEntry(Zobrist.hashForPosition(position), moves[i], depth, score, TranspositionTableEntry.EXACT, 0);
+						transpositionTable.add(entry);
+					}
+				} else {
+					if (USE_TT) {
+						TranspositionTableEntry entry = new TranspositionTableEntry(Zobrist.hashForPosition(position), moves[i], depth, score, TranspositionTableEntry.UPPER, 0);
+						transpositionTable.add(entry);
 					}
 				}
 			}
