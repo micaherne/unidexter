@@ -65,6 +65,8 @@ public class Search implements Runnable {
 			throw new SearchInterruptException();
 		}
 		
+		// TODO: Keep the hash up to date when moving / unmoving so we
+		// don't need to recalculate each time
 		long hashForCurrentPosition = Zobrist.hashForPosition(position);
 		if (USE_TT) {
 			TranspositionTableEntry entry = transpositionTable.get(hashForCurrentPosition);
