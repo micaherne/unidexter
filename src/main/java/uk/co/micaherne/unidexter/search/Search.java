@@ -27,8 +27,10 @@ public class Search implements Runnable {
 	private long nodes;
 	private Date searchStarted;
 	
+	
 	// Do we want to use the transposition table?
 	private static final boolean USE_TT = true;
+	private int tthit;
 	
 	public Search(Position position) {
 		this.position = position;
@@ -44,12 +46,15 @@ public class Search implements Runnable {
 		this.depth = depth;
 		principalVariation = new Line();
 		
+		tthit = 0;
 		// Set up info variables
 		nodes = 0;
 		searchStarted = new Date();
 		
 		// Using actual min and max value causes problems when negating
 		alphaBeta(depth, Integer.MIN_VALUE + 100, Integer.MAX_VALUE - 100, principalVariation);
+		
+		// System.out.println(tthit + " transposition table hits");
 		return principalVariation.moves[0];
 	}
 	
@@ -60,10 +65,12 @@ public class Search implements Runnable {
 			throw new SearchInterruptException();
 		}
 		
+		long hashForCurrentPosition = Zobrist.hashForPosition(position);
 		if (USE_TT) {
-			TranspositionTableEntry entry = transpositionTable.get(Zobrist.hashForPosition(position));
+			TranspositionTableEntry entry = transpositionTable.get(hashForCurrentPosition);
 			if (entry != null) {
-				if (entry.depth >= depth) {
+				if (hashForCurrentPosition == entry.key && entry.depth >= depth) {
+					tthit++;
 					switch (entry.type) {
 						case TranspositionTableEntry.LOWER:
 							if (entry.score >= beta) {
@@ -104,7 +111,7 @@ public class Search implements Runnable {
 				
 				if (score >= beta) {
 					if (USE_TT) {
-						TranspositionTableEntry entry = new TranspositionTableEntry(Zobrist.hashForPosition(position), moves[i], depth, score, TranspositionTableEntry.LOWER, 0);
+						TranspositionTableEntry entry = new TranspositionTableEntry(hashForCurrentPosition, moves[i], depth, score, TranspositionTableEntry.LOWER, 0);
 						transpositionTable.add(entry);
 					}
 					return beta;
@@ -125,12 +132,12 @@ public class Search implements Runnable {
 					}
 					
 					if (USE_TT) {
-						TranspositionTableEntry entry = new TranspositionTableEntry(Zobrist.hashForPosition(position), moves[i], depth, score, TranspositionTableEntry.EXACT, 0);
+						TranspositionTableEntry entry = new TranspositionTableEntry(hashForCurrentPosition, moves[i], depth, score, TranspositionTableEntry.EXACT, 0);
 						transpositionTable.add(entry);
 					}
 				} else {
 					if (USE_TT) {
-						TranspositionTableEntry entry = new TranspositionTableEntry(Zobrist.hashForPosition(position), moves[i], depth, score, TranspositionTableEntry.UPPER, 0);
+						TranspositionTableEntry entry = new TranspositionTableEntry(hashForCurrentPosition, moves[i], depth, score, TranspositionTableEntry.UPPER, 0);
 						transpositionTable.add(entry);
 					}
 				}
