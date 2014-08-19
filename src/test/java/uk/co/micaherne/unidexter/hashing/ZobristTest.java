@@ -17,13 +17,19 @@ public class ZobristTest {
 
 	@Test
 	public void test() {
-		Position position = Position.fromFEN(Chess.START_POS_FEN);
 		Zobrist.init();
+		Position position = Position.fromFEN(Chess.START_POS_FEN);
+		
 		long hash = Zobrist.hashForPosition(position);
-		System.out.println(hash);
+		assertEquals(hash, position.zobristHash);
+		
 		position.move(MoveUtils.create(Chess.Square.E2, Chess.Square.E4));
-		hash = Zobrist.hashForPosition(position);
-		System.out.println(hash);
+		long hash2 = Zobrist.hashForPosition(position);
+		
+		assertEquals(hash2, position.zobristHash);
+		
+		position.unmakeMove();
+		assertEquals(hash, position.zobristHash);
 	}
 
 }

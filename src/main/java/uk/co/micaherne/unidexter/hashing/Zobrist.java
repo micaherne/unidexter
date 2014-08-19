@@ -18,11 +18,15 @@ public class Zobrist {
 		Random random = new Random(1234);
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 64; j++) {
-				pieceSquare[i][j] = random.nextLong();
+				if (i == 0) {
+					pieceSquare[i][j] = 0L;
+				} else {
+					pieceSquare[i][j] = random.nextLong();
+				}
 			}
 		}
 		
-		whiteToMove = random.nextLong();
+		whiteToMove = -1L;
 		
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {

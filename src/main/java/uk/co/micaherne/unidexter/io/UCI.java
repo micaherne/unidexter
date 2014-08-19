@@ -201,7 +201,7 @@ public class UCI implements ChessProtocol {
 	}
 	
     private void commandGo(String input) {
-    	search.setDepth(7);
+    	search.setDepth(6);
     	search.setPosition(position);
     	searchThread = new Thread(search);
     	searchThread.start();
