@@ -20,6 +20,13 @@ public class TestPosition {
 	}
 	
 	@Test
+	public void testToFEN() {
+		Position position = Position.fromFEN(Chess.START_POS_FEN);
+		String fen = position.toFEN();
+		assertEquals(Chess.START_POS_FEN, position.toFEN());
+	}
+	
+	@Test
 	public void testMove() throws NotationException {
 		Position position = Position.fromFEN(Chess.START_POS_FEN);
 		int move = MoveUtils.create(Chess.Square.E2, Chess.Square.E4);
