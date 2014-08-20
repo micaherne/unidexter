@@ -27,10 +27,8 @@ public class LongAlgebraicNotation extends AlgebraicNotation {
 		int promotedPiece = MoveUtils.promotedPiece(move);
 		boolean isQueening = MoveUtils.isQueening(move);
 		StringBuilder result = new StringBuilder();
-		result.append((char)('a' + (fromSquare % 8)));
-		result.append((fromSquare / 8) + 1);
-		result.append((char)('a' + (toSquare % 8)));
-		result.append((toSquare / 8) + 1);
+		result.append(squareToString(fromSquare));
+		result.append(squareToString(toSquare));
 		if (isQueening && (promotedPiece == 0)) {
 			// The move is just a generated queening move without a specific piece
 			throw new NotationException("Unable to determine promoted piece");
