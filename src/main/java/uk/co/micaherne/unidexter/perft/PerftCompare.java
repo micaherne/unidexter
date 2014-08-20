@@ -16,7 +16,7 @@ import uk.co.micaherne.unidexter.notation.NotationException;
 public class PerftCompare {
 
 	public static void main(String[] args) throws IOException, NotationException {
-		int maxDepth = 4;
+		int maxDepth = 3;
 		FileReader fileReader = new FileReader("C:/Users/michael/git/micaherne/unidexter/roce39/perftsuite.epd");
 		BufferedReader reader = new BufferedReader(fileReader);
 		String line;
