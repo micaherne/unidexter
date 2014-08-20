@@ -30,6 +30,24 @@ public class ZobristTest {
 		
 		position.unmakeMove();
 		assertEquals(hash, position.zobristHash);
+		
+		// Another position
+		position = Position.fromFEN("r1bqkbnr/pppppppp/8/8/1n6/5N2/PPPPPPPP/RNBQKB1R w KQkq - 2 1");
+		assertEquals(Zobrist.hashForPosition(position), position.zobristHash);
+		
+		position.move(MoveUtils.create(Chess.Square.B4, Chess.Square.A2));
+		assertEquals(Zobrist.hashForPosition(position), position.zobristHash);
+		
+		// Another position
+		position = Position.fromFEN("r1bqkbnr/pppppppp/8/8/1n6/5N2/PPPPPPPP/RNBQKB1R b KQkq - 0 1");
+		assertEquals(Zobrist.hashForPosition(position), position.zobristHash);
+		
+		position.move(MoveUtils.create(Chess.Square.A8, Chess.Square.B8));
+		assertEquals(Zobrist.hashForPosition(position), position.zobristHash);
+		
+		position.unmakeMove();
+		assertEquals(Zobrist.hashForPosition(position), position.zobristHash);
+		
 	}
 
 }

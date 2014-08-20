@@ -214,6 +214,7 @@ public class Position {
 		undo.capturedPiece = board[toSquare]; // Always want this even if empty
 		if (board[toSquare] != Chess.Piece.EMPTY) {
 			undo.isCapture = true;
+			zobristHash ^= Zobrist.pieceSquare[board[toSquare]][toSquare];
 		}
 		
 		// Castling
@@ -325,6 +326,14 @@ public class Position {
 			unmakeMove();
 			return false;
 		}
+		
+
+		if (zobristHash != Zobrist.hashForPosition(this)) {
+			LongAlgebraicNotation notation = new LongAlgebraicNotation();
+			System.out.println(notation.toString(move));
+			System.out.println(this);
+			System.exit(1);
+		}
 				
 		// TODO: Half-moves and moves
 		
@@ -339,6 +348,7 @@ public class Position {
 
 	public void unmakeMove() {
 		MoveUndo undo = undoData.pop();
+		
 		int fromSquare = MoveUtils.fromSquare(undo.move);
 		int toSquare = MoveUtils.toSquare(undo.move);
 		
@@ -370,6 +380,8 @@ public class Position {
 			zobristHash ^= Zobrist.castling[0][1];
 		}
 		if (undo.affectsCastling[1]) {
+			System.out.println(castling[1][0]);
+			System.out.println(castling[1][1]);
 			zobristHash ^= Zobrist.castling[1][0];
 			zobristHash ^= Zobrist.castling[1][1];
 			castling[1] = undo.castling[1];
@@ -408,7 +420,9 @@ public class Position {
 		initialisePieceBitboards();
 		
 		if (zobristHash != Zobrist.hashForPosition(this)) {
+			LongAlgebraicNotation notation = new LongAlgebraicNotation();
 			System.out.println("Hash problem");
+			System.out.println("Move: " + notation.toString(undo.move));
 			System.out.println(this);
 		}
 		
