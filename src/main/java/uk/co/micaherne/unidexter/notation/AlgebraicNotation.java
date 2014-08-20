@@ -100,5 +100,12 @@ public abstract class AlgebraicNotation {
 	public String fromPiece(int piece) throws NotationException {
 		return fromPiece(piece, false);
 	}
+	
+	public String squareToString(int square) {
+		StringBuilder result = new StringBuilder();
+		result.append((char) ('a' + (square % 8)));
+		result.append((square / 8) + 1);
+		return result.toString();
+	}
 
 }

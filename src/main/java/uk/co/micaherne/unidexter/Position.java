@@ -133,6 +133,73 @@ public class Position {
 		
 		return result;
 	}
+	
+	public String toFEN() {
+		StringBuffer result = new StringBuffer();
+		LongAlgebraicNotation notation = new LongAlgebraicNotation();
+		
+		for (int i = 7; i >= 0; i--) {
+			int spaces = 0;
+			for (int j = 0; j < 8; j++) {
+				try {
+					int piece = board[i * 8 + j];
+					if (piece == Chess.Piece.EMPTY) {
+						spaces++;
+					} else {
+						if (spaces > 0) {
+							result.append(spaces);
+							spaces = 0;
+						}
+						result.append(notation.fromPiece(piece));
+					}
+				} catch (NotationException e) {
+					e.printStackTrace();
+					return "ERROR: Invalid values";
+				}
+			}
+			if (spaces > 0) {
+				result.append(spaces);
+				spaces = 0;
+			}
+			if (i > 0) {
+				result.append("/");
+			}
+		}
+		
+		result.append(" ");
+		result.append(whiteToMove ? "w" : "b");
+		
+		result.append(" ");
+		StringBuffer castlingResult = new StringBuffer();
+		for (int colour = 0; colour < 2; colour++) {
+			for (int piece = 0; piece < 2; piece++) {
+				if (castling[colour][piece]) {
+					char c = 'K';
+					c -= (piece * ('K' - 'Q') - (colour * ('a' - 'A')));
+					castlingResult.append(c);
+				}
+			}
+		}
+		if (castlingResult.length() == 0) {
+			result.append("-");
+		} else {
+			result.append(castlingResult.toString());
+		}
+		
+		result.append(" ");
+		if (epSquare == 0L) {
+			result.append("-");
+		} else {
+			result.append(notation.squareToString(Long.numberOfTrailingZeros(epSquare)));
+		}
+		
+		result.append(" ");
+		result.append(halfMoves);
+		result.append(" ");
+		result.append(moves);
+		
+		return result.toString();
+	}
 
 	@Override
 	public String toString() {
