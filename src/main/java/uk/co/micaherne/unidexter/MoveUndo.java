@@ -3,7 +3,7 @@ package uk.co.micaherne.unidexter;
 public class MoveUndo {
 	
 	public int move;
-	public boolean isCapture = false;
+
 	// Is castling affected for each side (some moves can affect both)
 	public boolean[] affectsCastling = new boolean[] {false, false};
 	public boolean isEnPassent = false;
