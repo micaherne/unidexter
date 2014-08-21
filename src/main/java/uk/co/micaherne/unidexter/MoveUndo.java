@@ -3,7 +3,7 @@ package uk.co.micaherne.unidexter;
 public class MoveUndo {
 	
 	public int move;
-	public boolean isCapture = false;
+
 	// Is castling affected for each side (some moves can affect both)
 	public boolean[] affectsCastling = new boolean[] {false, false};
 	public boolean isEnPassent = false;
@@ -12,7 +12,9 @@ public class MoveUndo {
 	public int capturedPiece = 0;
 	
 	public boolean[][] castling = new boolean[][]{{false, false}, {false, false}};
-	public long epSquare = 0;
+	public long epSquare = 0L;
+	
+	public long zobristHash = 0L;
 	
 	public MoveUndo(int move) {
 		this.move = move;

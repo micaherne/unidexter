@@ -17,7 +17,8 @@ public class PerftCompare {
 
 	public static void main(String[] args) throws IOException, NotationException {
 		int maxDepth = 4;
-		FileReader fileReader = new FileReader("C:/Users/michael/git/micaherne/unidexter/roce39/perftsuite.epd");
+		// FileReader fileReader = new FileReader("C:/Users/michael/git/micaherne/unidexter/roce39/perftsuite.epd");
+		FileReader fileReader = new FileReader("C:/Users/vas07101/Desktop/temp/chess/roce39/perftsuite.epd");
 		BufferedReader reader = new BufferedReader(fileReader);
 		String line;
 		int passes = 0;

@@ -4,12 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Date;
+import java.util.Map;
 
 import uk.co.micaherne.unidexter.Chess;
 import uk.co.micaherne.unidexter.FENException;
 import uk.co.micaherne.unidexter.Position;
 import uk.co.micaherne.unidexter.notation.LongAlgebraicNotation;
 import uk.co.micaherne.unidexter.notation.NotationException;
+import uk.co.micaherne.unidexter.perft.Perft;
 import uk.co.micaherne.unidexter.search.Line;
 import uk.co.micaherne.unidexter.search.Search;
 
@@ -126,6 +128,11 @@ public class UCI implements ChessProtocol {
 			System.exit(0);
 		}
 		
+		// Non-UCI commands
+		if("divide".equals(keyword)) {
+			commandDivide(input);
+		}
+		
 		// System.out.println(input);
 	}
 	
@@ -201,12 +208,36 @@ public class UCI implements ChessProtocol {
 	}
 	
     private void commandGo(String input) {
-    	search.setDepth(7);
+    	search.setDepth(6);
     	search.setPosition(position);
     	searchThread = new Thread(search);
     	searchThread.start();
     	// Thread calls sendBestMove() when finished or interrupted
 	}
+    
+    private void commandDivide(String input) throws UCIException {
+    	String[] tokens = input.split("\\s+");
+		if(!"divide".equals(tokens[0])){
+			throw new UCIException();
+		}
+		
+		int depth = 0;
+		try {
+			depth = Integer.parseInt(tokens[1]);
+		} catch (NumberFormatException e) {
+			doOutput("invalid divide depth " + tokens[1]);
+		}
+		
+		Map<String, Long> divide = Perft.divide(position, depth);
+		long nodes = 0L;
+		for (String key : divide.keySet()) {
+			Long moveCount = divide.get(key);
+			System.out.println(key + " " + moveCount);
+			nodes += moveCount;
+		}
+		System.out.println("Moves: " + divide.size());
+		System.out.println("Nodes: " + nodes);
+    }
     
     @Override
 	public void sendBestMove(int bestMove) {

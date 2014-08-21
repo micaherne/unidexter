@@ -20,6 +20,13 @@ public class TestPosition {
 	}
 	
 	@Test
+	public void testToFEN() {
+		Position position = Position.fromFEN(Chess.START_POS_FEN);
+		String fen = position.toFEN();
+		assertEquals(Chess.START_POS_FEN, position.toFEN());
+	}
+	
+	@Test
 	public void testMove() throws NotationException {
 		Position position = Position.fromFEN(Chess.START_POS_FEN);
 		int move = MoveUtils.create(Chess.Square.E2, Chess.Square.E4);
@@ -53,6 +60,14 @@ public class TestPosition {
 		int move = MoveUtils.create(Chess.Square.E8, Chess.Square.E7);
 		assertEquals(1, Perft.perft(position, 1).moveCount);
 		assertTrue(position.move(move));
+	}
+	
+	@Test
+	public void testMove3() {
+		Position position = Position.fromFEN("r3k2r/8/8/8/8/8/8/4K3 w kq - 0 1");
+		position.move(MoveUtils.create(Chess.Square.E1, Chess.Square.D2));
+		position.move(MoveUtils.create(Chess.Square.E8, Chess.Square.C8));
+		assertEquals(Chess.Piece.Black.ROOK, position.board[Chess.Square.D8]);
 	}
 	
 	@Test
