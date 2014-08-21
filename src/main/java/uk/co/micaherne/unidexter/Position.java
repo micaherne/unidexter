@@ -326,9 +326,9 @@ public class Position {
 					// Move rook
 					if (Math.abs(toSquare - fromSquare) == 2) {
 						if (toSquare == MoveGenerator.oooTo[sideMoving]) {
-							movePiece(MoveGenerator.oooRook[sideMoving], toSquare - 1);
+							movePiece(MoveGenerator.oooRook[sideMoving], toSquare + 1);
 						} else if (toSquare == MoveGenerator.ooTo[sideMoving]) {
-							movePiece(MoveGenerator.ooRook[sideMoving], toSquare + 1);
+							movePiece(MoveGenerator.ooRook[sideMoving], toSquare - 1);
 						}
 					}
 				}
