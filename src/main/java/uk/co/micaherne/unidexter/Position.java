@@ -57,7 +57,7 @@ public class Position {
 			if (board[i] == Chess.Piece.EMPTY) {
 				continue;
 			}
-			pieceBitboards[board[i] & 7] |= (1L << i);
+			pieceBitboards[MoveUtils.pieceType(board[i])] |= (1L << i);
 			pieceBitboards[Chess.Bitboard.OCCUPIED] |= (1L << i);
 			colourBitboards[(board[i] >> 3) & 1] |= (1L << i);
 		}
@@ -248,14 +248,14 @@ public class Position {
 		}
 		int fromSquare = MoveUtils.fromSquare(move);
 		int toSquare = MoveUtils.toSquare(move);
-		if ((epSquare & (1L << toSquare)) != 0 && ((board[fromSquare] & 7) == Chess.Piece.PAWN)) {
+		if ((epSquare & (1L << toSquare)) != 0 && (MoveUtils.pieceType(board[fromSquare]) == Chess.Piece.PAWN)) {
 			move |= (1 << 25);
 		}
 		if (MoveUtils.isQueening(move)) {
 			// make sure promotedPiece is the same colour as moved piece
 			int movedPiece = board[fromSquare];
 			if ((movedPiece & 8) != (MoveUtils.promotedPiece(move) & 8)) {
-				int actualPromotedPiece = (movedPiece & 8) | MoveUtils.promotedPiece(move) & 7;
+				int actualPromotedPiece = (movedPiece & 8) | MoveUtils.pieceType(MoveUtils.promotedPiece(move));
 				move = MoveUtils.create(fromSquare, toSquare, actualPromotedPiece);
 			}
 			
@@ -282,27 +282,24 @@ public class Position {
 		undo.movedPiece = board[fromSquare];
 		
 		undo.capturedPiece = movePiece(fromSquare, toSquare); // always want this even if empty
-		if (undo.capturedPiece != Chess.Piece.EMPTY) {
-			undo.isCapture = true;
-		}
 		
 		// Save the en passent square if necessary
 		if (epSquare != 0L) {
 			undo.epSquare = epSquare;
 			zobristHash ^= Zobrist.epFile[Long.numberOfTrailingZeros(epSquare) % 8];
 		}
-		
+
 		// Unset ep square (may be reset if pawn moves)
 		epSquare = 0L;
 		
 		// Unset castling rights for rook captures
-		if (castling[opposingSide][0] && ((undo.capturedPiece & 7) == Chess.Piece.ROOK) && (toSquare == MoveGenerator.oooRook[opposingSide])) {
+		if (castling[opposingSide][0] && (MoveUtils.pieceType(undo.capturedPiece) == Chess.Piece.ROOK) && (toSquare == MoveGenerator.oooRook[opposingSide])) {
 			undo.affectsCastling[opposingSide] = true;
 			undo.castling[opposingSide] = new boolean[] {castling[opposingSide][0], castling[opposingSide][1]};
 			castling[opposingSide][0] = false;
 			zobristHash ^= Zobrist.castling[opposingSide][0];
 		}
-		if (castling[opposingSide][1] && ((undo.capturedPiece & 7) == Chess.Piece.ROOK) && (toSquare == MoveGenerator.ooRook[opposingSide])) {
+		if (castling[opposingSide][1] && (MoveUtils.pieceType(undo.capturedPiece) == Chess.Piece.ROOK) && (toSquare == MoveGenerator.ooRook[opposingSide])) {
 			undo.affectsCastling[opposingSide] = true;
 			undo.castling[opposingSide] = new boolean[] {castling[opposingSide][0], castling[opposingSide][1]};
 			castling[opposingSide][1] = false;
@@ -369,7 +366,7 @@ public class Position {
 
 					if (toSquare > fromSquare) {
 						zobristToggle(toSquare - 8);
-						board[toSquare -  8] = Chess.Piece.EMPTY;
+						board[toSquare - 8] = Chess.Piece.EMPTY;
 						undo.capturedPiece = Chess.Piece.Black.PAWN;
 					} else {
 						zobristToggle(toSquare + 8);
@@ -385,12 +382,7 @@ public class Position {
 				}
 				break;
 		}
-		
 
-		
-		
-		
-		
 		undoData.push(undo);
 		
 		zobristHash ^= Zobrist.whiteToMove;
@@ -469,7 +461,7 @@ public class Position {
 		}
 		
 		// Reset castled rook
-		if (((undo.movedPiece & 7) == Chess.Piece.KING) && (Math.abs(fromSquare - toSquare) == 2)) {
+		if ((MoveUtils.pieceType(undo.movedPiece) == Chess.Piece.KING) && (Math.abs(fromSquare - toSquare) == 2)) {
 			int rookSquare = fromSquare + ((toSquare - fromSquare) / 2);
 			int rook = board[rookSquare];
 			if (toSquare > fromSquare) {
