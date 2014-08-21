@@ -14,6 +14,8 @@ public class Zobrist {
 	
 	public static long[] epFile = new long[8];
 
+	public static final boolean DEBUG = false;
+
 	public static void init() {
 		Random random = new Random(1234);
 		for (int i = 0; i < 15; i++) {

@@ -291,6 +291,13 @@ public class Position {
 		// Unset ep square (may be reset if pawn moves)
 		epSquare = 0L;
 		
+		// Initialise castling
+		for (int colour = 0; colour < 2; colour++) {
+			for (int piece = 0; piece < 2; piece++) {
+				undo.castling[colour][piece] = castling[colour][piece];
+			}
+		}
+		
 		// Unset castling rights for rook captures
 		if (castling[opposingSide][0] && (MoveUtils.pieceType(undo.capturedPiece) == Chess.Piece.ROOK) && (toSquare == MoveGenerator.oooRook[opposingSide])) {
 			undo.affectsCastling[opposingSide] = true;
@@ -311,15 +318,16 @@ public class Position {
 				// Castling
 				if (castling[sideMoving][0] || castling[sideMoving][1]) {
 					undo.affectsCastling[sideMoving] = true;
-					undo.castling[sideMoving] = new boolean[] {castling[sideMoving][0], castling[sideMoving][1]};
+					undo.castling[sideMoving][0] = castling[sideMoving][0];
+					undo.castling[sideMoving][1] = castling[sideMoving][1];
 					castling[sideMoving][0] = false;
 					castling[sideMoving][1] = false;
 					
-					if (castling[0][0] != undo.castling[0][0]) {
-						zobristHash ^= Zobrist.castling[0][0];
+					if (castling[sideMoving][0] != undo.castling[sideMoving][0]) {
+						zobristHash ^= Zobrist.castling[sideMoving][0];
 					}
-					if (castling[0][1] != undo.castling[0][1]) {
-						zobristHash ^= Zobrist.castling[0][1];
+					if (castling[sideMoving][1] != undo.castling[sideMoving][1]) {
+						zobristHash ^= Zobrist.castling[sideMoving][1];
 					}
 								
 					// Move rook
@@ -396,12 +404,13 @@ public class Position {
 		}
 		
 
-		/*if (zobristHash != Zobrist.hashForPosition(this)) {
+		if (Zobrist.DEBUG && zobristHash != Zobrist.hashForPosition(this)) {
 			LongAlgebraicNotation notation = new LongAlgebraicNotation();
+			System.out.println("Hash problem post");
 			System.out.println(notation.toString(move));
 			System.out.println(toFEN());
-			System.exit(1);
-		}*/
+			// System.exit(1);
+		}
 				
 		// TODO: Half-moves and moves
 		
@@ -473,11 +482,14 @@ public class Position {
 		}
 		
 		if (undo.isEnPassent) {
+			zobristToggle(toSquare);
 			board[toSquare] = Chess.Piece.EMPTY;
 			if (toSquare > fromSquare) {
 				board[toSquare -  8] = undo.capturedPiece;
+				zobristToggle(toSquare - 8);
 			} else {
 				board[toSquare + 8] = undo.capturedPiece;
+				zobristToggle(toSquare + 8);
 			}
 		}
 		
@@ -485,13 +497,6 @@ public class Position {
 		whiteToMove = !whiteToMove;
 		
 		initialisePieceBitboards();
-		
-		/*if (zobristHash != Zobrist.hashForPosition(this)) {
-			LongAlgebraicNotation notation = new LongAlgebraicNotation();
-			System.out.println("Hash problem");
-			System.out.println("Move: " + notation.toString(undo.move));
-			System.out.println(this);
-		}*/
 		
 		// TODO: Half-moves and moves
 	}
