@@ -443,20 +443,22 @@ public class Position {
 		if (undo.affectsCastling[0]) {
 			if (castling[0][0] != undo.castling[0][0]) {
 				zobristHash ^= Zobrist.castling[0][0];
+				castling[0][0] = undo.castling[0][0];
 			}
 			if (castling[0][1] != undo.castling[0][1]) {
 				zobristHash ^= Zobrist.castling[0][1];
+				castling[0][1] = undo.castling[0][1];
 			}
-			castling[0] = undo.castling[0];
 		}
 		if (undo.affectsCastling[1]) {
 			if (castling[1][0] != undo.castling[1][0]) {
 				zobristHash ^= Zobrist.castling[1][0];
+				castling[1][0] = undo.castling[1][0];
 			}
 			if (castling[1][1] != undo.castling[1][1]) {
 				zobristHash ^= Zobrist.castling[1][1];
+				castling[1][1] = undo.castling[1][1];
 			}
-			castling[1] = undo.castling[1];
 		}
 		
 		// Reset castled rook
