@@ -280,7 +280,6 @@ public class Position {
 		int opposingSide = whiteToMove ? Chess.Colour.BLACK : Chess.Colour.WHITE;
 
 		undo.movedPiece = board[fromSquare];
-		
 		undo.capturedPiece = movePiece(fromSquare, toSquare); // always want this even if empty
 		
 		// Save the en passent square if necessary
@@ -421,14 +420,14 @@ public class Position {
 		int fromSquare = MoveUtils.fromSquare(undo.move);
 		int toSquare = MoveUtils.toSquare(undo.move);
 		
-		zobristHash ^= Zobrist.pieceSquare[board[fromSquare]][fromSquare];
-		zobristHash ^= Zobrist.pieceSquare[board[toSquare]][toSquare];
+		zobristToggle(fromSquare);
+		zobristToggle(toSquare);
 		
 		board[fromSquare] = undo.movedPiece;
 		board[toSquare] = undo.capturedPiece;
 		
-		zobristHash ^= Zobrist.pieceSquare[board[fromSquare]][fromSquare];
-		zobristHash ^= Zobrist.pieceSquare[board[toSquare]][toSquare];
+		zobristToggle(fromSquare);
+		zobristToggle(toSquare);
 		
 		if (epSquare != 0L) {
 			zobristHash ^= Zobrist.epFile[Long.numberOfTrailingZeros(epSquare) % 8];
@@ -465,15 +464,10 @@ public class Position {
 			int rookSquare = fromSquare + ((toSquare - fromSquare) / 2);
 			int rook = board[rookSquare];
 			if (toSquare > fromSquare) {
-				zobristHash ^= Zobrist.pieceSquare[board[rookSquare + 2]][rookSquare + 2];
-				board[rookSquare + 2] = rook;
+				movePiece(rookSquare, rookSquare + 2);
 			} else {
-				zobristHash ^= Zobrist.pieceSquare[board[rookSquare - 3]][rookSquare - 3];
-				board[rookSquare - 3] = rook;
+				movePiece(rookSquare, rookSquare - 3);
 			}
-			
-			zobristHash ^= Zobrist.pieceSquare[board[rookSquare]][rookSquare];
-			board[rookSquare] = Chess.Piece.EMPTY;
 		}
 		
 		if (undo.isEnPassent) {

@@ -63,13 +63,22 @@ public class ZobristTest {
 		position.unmakeMove();
 		assertEquals(hash3, position.zobristHash);
 		
+		
+		// Another position
+		position = Position.fromFEN("r1bqkbnr/ppp1pppp/n2p4/8/8/5N2/PPPPPPPP/RNBQKB1R b KQ - 0 1");
+		zz(position);
+		position.move(MoveUtils.create(Chess.Square.E8, Chess.Square.D7));
+		zz(position);
+		position.unmakeMove();
+		zz(position);
+		
 		// Castling
-		/*position = Position.fromFEN("4k3/8/8/8/8/8/8/4K2R w K - 0 1");
+		position = Position.fromFEN("4k3/8/8/8/8/8/8/4K2R w K - 0 1");
 		zz(position);
 		position.move(MoveUtils.create(Chess.Square.E1, Chess.Square.G1));
 		zz(position);
 		position.unmakeMove();
-		zz(position);*/
+		zz(position);
 	}
 
 	/**
