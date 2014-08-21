@@ -63,6 +63,14 @@ public class TestPosition {
 	}
 	
 	@Test
+	public void testMove3() {
+		Position position = Position.fromFEN("r3k2r/8/8/8/8/8/8/4K3 w kq - 0 1");
+		position.move(MoveUtils.create(Chess.Square.E1, Chess.Square.D2));
+		position.move(MoveUtils.create(Chess.Square.E8, Chess.Square.C8));
+		assertEquals(Chess.Piece.Black.ROOK, position.board[Chess.Square.D8]);
+	}
+	
+	@Test
 	public void testEPMove() throws NotationException {
 		// EP square is cleared on moving / taking
 		Position position = Position.fromFEN("r4rk1/p1ppqpb1/bn2pnp1/3PN3/Pp2P3/2N2Q1p/1PP1BPPP/R1B1K2R b KQ a3 0 2");
