@@ -279,8 +279,14 @@ public class Position {
 		int sideMoving = whiteToMove ? Chess.Colour.WHITE : Chess.Colour.BLACK;
 		int opposingSide = whiteToMove ? Chess.Colour.BLACK : Chess.Colour.WHITE;
 
+		undo.halfMoves = halfMoves;
 		undo.movedPiece = board[fromSquare];
 		undo.capturedPiece = movePiece(fromSquare, toSquare); // always want this even if empty
+		if (undo.capturedPiece != Chess.Piece.EMPTY) {
+			halfMoves = 0;
+		} else {
+			halfMoves++;
+		}
 		
 		// Save the en passent square if necessary
 		if (epSquare != 0L) {
@@ -387,6 +393,8 @@ public class Position {
 					epSquare = 1L << (fromSquare + ((toSquare - fromSquare) / 2));
 					zobristHash ^= Zobrist.epFile[Long.numberOfTrailingZeros(epSquare) % 8];
 				}
+				
+				halfMoves = 0;
 				break;
 		}
 
@@ -412,8 +420,10 @@ public class Position {
 			// System.exit(1);
 		}
 				
-		// TODO: Half-moves and moves
-		
+		if (whiteToMove) {
+			moves++;
+		}
+				
 		return true;
 	}
 	
@@ -498,7 +508,10 @@ public class Position {
 		
 		initialisePieceBitboards();
 		
-		// TODO: Half-moves and moves
+		halfMoves = undo.halfMoves;
+		if (!whiteToMove) {
+			moves--;
+		}
 	}
 	
 	/**

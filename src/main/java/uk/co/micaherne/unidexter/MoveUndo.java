@@ -15,6 +15,8 @@ public class MoveUndo {
 	public long epSquare = 0L;
 	
 	public long zobristHash = 0L;
+
+	public int halfMoves = 0;
 	
 	public MoveUndo(int move) {
 		this.move = move;
