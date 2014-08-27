@@ -1,3 +1,8 @@
-target/
+target/generated-sources
+target/generated-test-sources
+target/maven-archiver
+target/surefire-reports
+target/classes
+target/test-classes
 roce39/
 Sharper/
