@@ -94,11 +94,12 @@ public class Search implements Runnable {
 		if (depth == 0) {
 			nodes++; // just count evaluated nodes
 			pline.moveCount = 0;
-			if (position.whiteToMove) {
+			/*if (position.whiteToMove) {
 				return evaluation.evaluate();
 			} else {
 				return -evaluation.evaluate();
-			}
+			}*/
+			return quiesce(alpha, beta, line);
 		}
 		
 		int[] moves = moveGenerator.generateMoves();
@@ -127,7 +128,7 @@ public class Search implements Runnable {
 					if (protocol != null
 							&& pline == this.principalVariation) {
 							protocol.sendPrincipalVariation(this.principalVariation, score,
-									depth, nodes, searchStarted);
+									this.principalVariation.moveCount, nodes, searchStarted);
 
 					}
 					
@@ -156,6 +157,94 @@ public class Search implements Runnable {
 		
 		return alpha;
 		
+	}
+	
+	public int quiesce(int alpha, int beta, Line pline) {
+		Line line = new Line();
+
+		if (Thread.interrupted()) {
+			throw new SearchInterruptException();
+		}
+		
+		long hashForCurrentPosition = position.zobristHash;
+		if (USE_TT) {
+			TranspositionTableEntry entry = transpositionTable.get(hashForCurrentPosition);
+			if (entry != null) {
+				if (hashForCurrentPosition == entry.key && entry.depth >= depth) {
+					tthit++;
+					switch (entry.type) {
+						case TranspositionTableEntry.LOWER:
+							if (entry.score >= beta) {
+								return beta;
+							}
+							break;
+						case TranspositionTableEntry.UPPER:
+							if (entry.score < alpha) {
+								return alpha;
+							}
+							break;
+						case TranspositionTableEntry.EXACT:
+							if (entry.score > alpha && entry.score < beta) {
+								return entry.score;
+							}
+					}
+				}
+			}
+		}
+		
+		int standPat = 0;
+		if (position.whiteToMove) {
+			standPat = evaluation.evaluate();
+		} else {
+			standPat = -evaluation.evaluate();
+		}
+		
+		if (standPat >= beta) {
+			return beta;
+		} else if (alpha < standPat) {
+			alpha = standPat;
+		}
+		
+		int[] moves = new int[128];
+		int moveCount = moveGenerator.generateCaptures(moves, 0);
+		boolean validMoveFound = false;
+		for (int i = 1; i <= moveCount; i++) {
+			if (position.move(moves[i])) {
+				validMoveFound = true;
+				int score = -quiesce(-beta, -alpha, line);
+				position.unmakeMove();
+				
+				if (score >= beta) {
+					if (USE_TT) {
+						TranspositionTableEntry entry = new TranspositionTableEntry(hashForCurrentPosition, moves[i], depth, score, TranspositionTableEntry.LOWER, 0);
+						transpositionTable.add(entry);
+					}
+					return beta;
+				}
+				if (score > alpha) {
+					alpha = score;
+					
+					pline.moves[0] = moves[i];
+					System.arraycopy(line.moves, 0, pline.moves, 1,
+							line.moveCount);
+					pline.moveCount = line.moveCount + 1;
+					
+					if (USE_TT) {
+						TranspositionTableEntry entry = new TranspositionTableEntry(hashForCurrentPosition, moves[i], depth, score, TranspositionTableEntry.EXACT, 0);
+						transpositionTable.add(entry);
+					}
+				} else {
+					if (USE_TT) {
+						TranspositionTableEntry entry = new TranspositionTableEntry(hashForCurrentPosition, moves[i], depth, score, TranspositionTableEntry.UPPER, 0);
+						transpositionTable.add(entry);
+					}
+				}
+			}
+		}
+		
+		// TODO: What if it's a terminal position??
+		
+		return alpha;
 	}
 
 	public void setPosition(Position position) {
