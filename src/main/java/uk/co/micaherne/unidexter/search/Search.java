@@ -54,7 +54,7 @@ public class Search implements Runnable {
 		// Using actual min and max value causes problems when negating
 		alphaBeta(depth, Integer.MIN_VALUE + 100, Integer.MAX_VALUE - 100, principalVariation);
 		
-		System.out.println("info string " + tthit + " transposition table hits");
+		// System.out.println("info string " + tthit + " transposition table hits");
 		return principalVariation.moves[0];
 	}
 	
