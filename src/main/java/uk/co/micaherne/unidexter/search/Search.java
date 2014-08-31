@@ -22,7 +22,12 @@ public class Search implements Runnable {
 	public int bestMove;
 	// public int[] pv;
 	
+	// the requested search depth
 	private int depth;
+	
+	// the actual current ply
+	public int ply;
+	
 	private ChessProtocol protocol;
 	public Line principalVariation;
 	private long nodes;
@@ -54,6 +59,7 @@ public class Search implements Runnable {
 	 */
 	public int search(int depth) {
 		this.depth = depth;
+		this.ply = 0;
 		principalVariation = new Line();
 		
 		tthit = 0;
@@ -121,8 +127,10 @@ public class Search implements Runnable {
 		for (int i = 1; i <= moves[0]; i++) {
 			if (position.move(moves[i])) {
 				validMoveFound = true;
+				ply++;
 				int score = -search(depth - 1, -beta, -alpha, line);
 				position.unmakeMove();
+				ply--;
 				
 				if (score >= beta) {
 					if (USE_TT) {
@@ -140,7 +148,7 @@ public class Search implements Runnable {
 					pline.moveCount = line.moveCount + 1;
 
 					if (protocol != null
-							&& pline == this.principalVariation) {
+							&& ply == 0) {
 							protocol.sendPrincipalVariation(this.principalVariation, score,
 									depth, nodes, searchStarted);
 
