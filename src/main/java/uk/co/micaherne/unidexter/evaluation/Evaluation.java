@@ -37,7 +37,11 @@ public class Evaluation {
 		result += (pieceSquare(Chess.Piece.BISHOP, Chess.Colour.WHITE) - pieceSquare(Chess.Piece.BISHOP, Chess.Colour.BLACK));
 		result += (pieceSquare(Chess.Piece.QUEEN, Chess.Colour.WHITE) - pieceSquare(Chess.Piece.QUEEN, Chess.Colour.BLACK));
 
-		return result;
+		if (position.whiteToMove) {
+			return result;
+		} else {
+			return -result;
+		}
 	}
 	
 	/**
@@ -52,9 +56,9 @@ public class Evaluation {
 	 */
 	public int evaluateTerminal(int depth) {
 		if (position.whiteToMove && position.inCheck(Colour.WHITE)) {
-			return (Integer.MIN_VALUE / 2 - depth);
+			return (Integer.MIN_VALUE / 2 + depth);
 		} else if (!position.whiteToMove && position.inCheck(Colour.BLACK)) {
-			return (Integer.MAX_VALUE / 2 + depth);
+			return (Integer.MIN_VALUE / 2 + depth);
 		} else {
 			return 0; // stalemate
 		}

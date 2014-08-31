@@ -28,19 +28,20 @@ public class SearchTests {
 	public void testBestMove() throws NotationException, InterruptedException {
 		Position position = Position.fromFEN("rnb1kbnr/pp1pp2p/8/4N2Q/4R3/3B4/2PB1PPP/5RK1 b kq - 0 18");
 		Search search = new Search(position);
-		int move = search.bestMove(1);
+		int move = search.search(1);
 		assertEquals(MoveUtils.create(Chess.Square.E8, Chess.Square.D8), move);
-		move = search.bestMove(3);
+		move = search.search(3);
 		assertEquals(MoveUtils.create(Chess.Square.E8, Chess.Square.D8), move);
 		
 		 // Was giving Nf2 in this position:
         position = Position.fromFEN("r1bqk2r/pppp1ppp/2n1p3/8/3PP1n1/2PB1N1P/P1P2PP1/R1BQK2R b KQkq - 0 7");
         search = new Search(position);
-        move = search.bestMove(4);
+        move = search.search(4);
+        
+        System.out.println(search.principalVariation);
         
         assertNotEquals("g4f2", notation.toString(move));
         
-        System.out.println(notation.toString(move));
 	}
 
 	@Test
@@ -56,7 +57,7 @@ public class SearchTests {
 			System.out.println(notation.toString(moves[i]));
 		}
 		Search search = new Search(position);
-        int move = search.bestMove(4);
+        int move = search.search(4);
         
         assertNotEquals("f5f4", notation.toString(move));
 		/*System.out.println(position);
@@ -79,6 +80,6 @@ public class SearchTests {
 		Position position = Position.fromFEN(Chess.START_POS_FEN);
 		Search search = new Search(position);
 		Line pline = new Line();
-		search.alphaBeta(4, Integer.MIN_VALUE + 100, Integer.MAX_VALUE - 100, pline);
+		search.search(4, Integer.MIN_VALUE + 100, Integer.MAX_VALUE - 100, pline);
 	}
 }

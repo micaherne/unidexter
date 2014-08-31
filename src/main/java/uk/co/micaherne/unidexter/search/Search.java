@@ -21,9 +21,10 @@ public class Search implements Runnable {
 	// For threading use
 	public int bestMove;
 	// public int[] pv;
+	
 	private int depth;
 	private ChessProtocol protocol;
-	private Line principalVariation;
+	public Line principalVariation;
 	private long nodes;
 	private Date searchStarted;
 	
@@ -42,7 +43,16 @@ public class Search implements Runnable {
 		}
 	}
 
-	public int bestMove(int depth) {
+	/**
+	 * The root search method. Searches to at least given depth, but may search
+	 * some nodes more deeply.
+	 * 
+	 * This will update bestMove and principalVariation as it searches.
+	 * 
+	 * @param depth
+	 * @return
+	 */
+	public int search(int depth) {
 		this.depth = depth;
 		principalVariation = new Line();
 		
@@ -52,13 +62,22 @@ public class Search implements Runnable {
 		searchStarted = new Date();
 		
 		// Using actual min and max value causes problems when negating
-		alphaBeta(depth, Integer.MIN_VALUE + 100, Integer.MAX_VALUE - 100, principalVariation);
+		search(depth, Integer.MIN_VALUE + 100, Integer.MAX_VALUE - 100, principalVariation);
 		
 		// System.out.println("info string " + tthit + " transposition table hits");
 		return principalVariation.moves[0];
 	}
 	
-	public int alphaBeta(int depth, int alpha, int beta, Line pline) {
+	/**
+	 * The actual minimax search method.
+	 * 
+	 * @param depth
+	 * @param alpha
+	 * @param beta
+	 * @param pline
+	 * @return
+	 */
+	public int search(int depth, int alpha, int beta, Line pline) {
 		Line line = new Line();
 
 		if (Thread.interrupted()) {
@@ -94,11 +113,7 @@ public class Search implements Runnable {
 		if (depth == 0) {
 			nodes++; // just count evaluated nodes
 			pline.moveCount = 0;
-			if (position.whiteToMove) {
-				return evaluation.evaluate();
-			} else {
-				return -evaluation.evaluate();
-			}
+			return evaluation.evaluate();
 		}
 		
 		int[] moves = moveGenerator.generateMoves();
@@ -106,7 +121,7 @@ public class Search implements Runnable {
 		for (int i = 1; i <= moves[0]; i++) {
 			if (position.move(moves[i])) {
 				validMoveFound = true;
-				int score = -alphaBeta(depth - 1, -beta, -alpha, line);
+				int score = -search(depth - 1, -beta, -alpha, line);
 				position.unmakeMove();
 				
 				if (score >= beta) {
@@ -146,12 +161,7 @@ public class Search implements Runnable {
 		
 		// If no moves have worked, it's checkmate or stalemate
 		if (!validMoveFound) {
-			if (position.whiteToMove) {
-				return evaluation.evaluateTerminal(depth);
-			} else {
-				return -evaluation.evaluateTerminal(depth);
-			}
-
+			return evaluation.evaluateTerminal(depth);
 		}
 		
 		return alpha;
@@ -167,7 +177,7 @@ public class Search implements Runnable {
 	@Override
 	public void run() {
 		try {
-			bestMove = bestMove(depth);
+			bestMove = search(depth);
 		} catch (SearchInterruptException e) {
 			// just let it send the best move as normal
 		}
