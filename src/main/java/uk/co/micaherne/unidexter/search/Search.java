@@ -67,9 +67,12 @@ public class Search implements Runnable {
 		nodes = 0;
 		searchStarted = new Date();
 		
-		// Using actual min and max value causes problems when negating
-		search(depth, Integer.MIN_VALUE + 100, Integer.MAX_VALUE - 100, principalVariation);
-		
+		for (int i = 0; i <= depth; i++) {
+			// Using actual min and max value causes problems when negating
+			search(depth, Integer.MIN_VALUE + 100, Integer.MAX_VALUE - 100, principalVariation);
+			
+			// TODO: Iterative deepening - return if out of time
+		}
 		// System.out.println("info string " + tthit + " transposition table hits");
 		return principalVariation.moves[0];
 	}
@@ -192,6 +195,11 @@ public class Search implements Runnable {
 		this.protocol.sendBestMove(bestMove);
 	}
 
+	/**
+	 * Set the nominal search depth
+	 * 
+	 * @param depth depth in ply
+	 */
 	public void setDepth(int depth) {
 		this.depth = depth;
 	}
