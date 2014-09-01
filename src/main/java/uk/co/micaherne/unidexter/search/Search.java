@@ -67,12 +67,12 @@ public class Search implements Runnable {
 		nodes = 0;
 		searchStarted = new Date();
 		
-		for (int i = 0; i <= depth; i++) {
+		//for (int i = 0; i <= depth; i++) {
 			// Using actual min and max value causes problems when negating
 			search(depth, Integer.MIN_VALUE + 100, Integer.MAX_VALUE - 100, principalVariation);
 			
 			// TODO: Iterative deepening - return if out of time
-		}
+		//}
 		// System.out.println("info string " + tthit + " transposition table hits");
 		return principalVariation.moves[0];
 	}

@@ -56,9 +56,9 @@ public class Evaluation {
 	 */
 	public int evaluateTerminal(int depth) {
 		if (position.whiteToMove && position.inCheck(Colour.WHITE)) {
-			return (Integer.MIN_VALUE / 2 + depth);
+			return (Integer.MIN_VALUE / 2 - depth);
 		} else if (!position.whiteToMove && position.inCheck(Colour.BLACK)) {
-			return (Integer.MIN_VALUE / 2 + depth);
+			return (Integer.MIN_VALUE / 2 - depth);
 		} else {
 			return 0; // stalemate
 		}

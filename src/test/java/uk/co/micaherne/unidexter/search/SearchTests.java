@@ -36,11 +36,13 @@ public class SearchTests {
 		 // Was giving Nf2 in this position:
         position = Position.fromFEN("r1bqk2r/pppp1ppp/2n1p3/8/3PP1n1/2PB1N1P/P1P2PP1/R1BQK2R b KQkq - 0 7");
         search = new Search(position);
-        move = search.search(4);
+        // move = search.search(4);
+        move = search.search(6);
         
         System.out.println(search.principalVariation);
         
         assertNotEquals("g4f2", notation.toString(move));
+        assertEquals("g4f6", notation.toString(move));
         
 	}
 
