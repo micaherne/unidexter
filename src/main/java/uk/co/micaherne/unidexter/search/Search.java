@@ -122,7 +122,8 @@ public class Search implements Runnable {
 		if (depth == 0) {
 			nodes++; // just count evaluated nodes
 			pline.moveCount = 0;
-			return evaluation.evaluate();
+			// return evaluation.evaluate();
+			return quiesce(alpha, beta, line);
 		}
 		
 		int[] moves = moveGenerator.generateMoves();
@@ -153,7 +154,7 @@ public class Search implements Runnable {
 					if (protocol != null
 							&& ply == 0) {
 							protocol.sendPrincipalVariation(this.principalVariation, score,
-									depth, nodes, searchStarted);
+									nodes, searchStarted);
 
 					}
 					
@@ -166,6 +167,64 @@ public class Search implements Runnable {
 						TranspositionTableEntry entry = new TranspositionTableEntry(hashForCurrentPosition, moves[i], depth, score, TranspositionTableEntry.UPPER, 0);
 						transpositionTable.add(entry);
 					}
+				}
+			}
+		}
+		
+		// If no moves have worked, it's checkmate or stalemate
+		if (!validMoveFound) {
+			return evaluation.evaluateTerminal(depth);
+		}
+		
+		return alpha;
+		
+	}
+	
+	public int quiesce(int alpha, int beta, Line pline) {
+		Line line = new Line();
+
+		if (Thread.interrupted()) {
+			throw new SearchInterruptException();
+		}
+		
+		int standPat = evaluation.evaluate();
+		if (standPat > beta) {
+			return beta;
+		}
+		if (alpha < standPat) {
+			alpha = standPat;
+		}
+		
+		int[] moves = new int[128]; 
+		int moveCount = moveGenerator.generateCaptures(moves, 0);
+		boolean validMoveFound = false;
+		for (int i = 1; i <= moveCount; i++) {
+			if (position.move(moves[i])) {
+				validMoveFound = true;
+				ply++;
+				int score = -quiesce(-beta, -alpha, line);
+				position.unmakeMove();
+				ply--;
+				
+				if (score >= beta) {
+					return beta;
+				}
+				if (score > alpha) {
+					alpha = score;
+					
+					pline.moves[0] = moves[i];
+					System.arraycopy(line.moves, 0, pline.moves, 1,
+							line.moveCount);
+					pline.moveCount = line.moveCount + 1;
+
+					if (protocol != null
+							&& ply == 0) {
+							protocol.sendPrincipalVariation(this.principalVariation, score,
+									nodes, searchStarted);
+
+					}
+				} else {
+					
 				}
 			}
 		}

@@ -250,7 +250,7 @@ public class UCI implements ChessProtocol {
 
 
 	@Override
-	public void sendPrincipalVariation(Line line, int score, int depth, long nodes, Date timeStarted) {
+	public void sendPrincipalVariation(Line line, int score, long nodes, Date timeStarted) {
 		long timeTaken = new Date().getTime() - timeStarted.getTime(); // milliseconds
 		StringBuilder result = new StringBuilder("info ");
 		result.append("depth ").append(line.moveCount).append(" score cp ").append(score).append(" time ")

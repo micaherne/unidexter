@@ -11,6 +11,6 @@ public interface ChessProtocol {
 
 	public abstract void sendBestMove(int bestMove);
 	
-	public abstract void sendPrincipalVariation(Line line, int score, int depth, long nodes, Date timeStarted);
+	public abstract void sendPrincipalVariation(Line line, int score, long nodes, Date timeStarted);
 
 }

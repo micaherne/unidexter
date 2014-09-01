@@ -22,7 +22,6 @@ public class TestPosition {
 	@Test
 	public void testToFEN() {
 		Position position = Position.fromFEN(Chess.START_POS_FEN);
-		String fen = position.toFEN();
 		assertEquals(Chess.START_POS_FEN, position.toFEN());
 	}
 	
